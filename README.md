@@ -10,3 +10,8 @@
 ```
 /keymap load <name>
 ```
+
+リスト
+```
+/keymap list
+```
