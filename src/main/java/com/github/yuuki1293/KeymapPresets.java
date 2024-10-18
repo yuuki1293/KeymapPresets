@@ -101,6 +101,8 @@ public class KeymapPresets implements ModInitializer {
                 keyBinding.ifPresent(binding -> binding.setBoundKey(InputUtil.fromTranslationKey(keyName)));
 
             }
+
+            KeyBinding.updateKeysByCode();
         } catch (Exception e) {
             LOGGER.info("Keymap file does not exist", e);
         }
