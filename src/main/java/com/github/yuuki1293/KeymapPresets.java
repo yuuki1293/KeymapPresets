@@ -23,10 +23,10 @@ public class KeymapPresets implements ModInitializer {
     @Override
     public void onInitialize() {
         keyBindingSave = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.examplemod.spook", // The translation key of the keybinding's name
+                "key.keymappresets.save", // The translation key of the keybinding's name
                 InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
                 GLFW.GLFW_KEY_R, // The keycode of the key
-                "category.examplemod.test" // The translation key of the keybinding's category.
+                "category.keymappresets.generic" // The translation key of the keybinding's category.
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -56,7 +56,5 @@ public class KeymapPresets implements ModInitializer {
                 }
             }
         });
-
-
     }
 }
