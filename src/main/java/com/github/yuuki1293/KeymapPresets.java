@@ -33,7 +33,7 @@ public class KeymapPresets implements ModInitializer {
             while (keyBindingSave.wasPressed()) {
                 String presetName = "sample preset";
                 final File keymapDirectory = new File(client.runDirectory, MOD_ID);
-                final File presetFile = new File(keymapDirectory, presetName);
+                final File presetFile = new File(keymapDirectory, presetName + ".txt");
 
                 try {
                     if (keymapDirectory.mkdirs())
