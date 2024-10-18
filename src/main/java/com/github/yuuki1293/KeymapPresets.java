@@ -9,12 +9,15 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.LiteralText;
+import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 public class KeymapPresets implements ModInitializer {
@@ -56,6 +59,12 @@ public class KeymapPresets implements ModInitializer {
                             loadKeymap(presetName);
                             return 1;
                         })))
+                .then(ClientCommandManager.literal("list")
+                    .executes(context -> {
+                        Arrays.stream(getPresets())
+                            .forEach(preset -> context.getSource().sendFeedback(new LiteralText(preset)));
+                        return 1;
+                    }))
         );
     }
 
@@ -108,14 +117,16 @@ public class KeymapPresets implements ModInitializer {
         }
     }
 
-    private File[] getPresetFiles() {
+    private String[] getPresets() {
         final File keymapDirectory = new File(client.runDirectory, MOD_ID);
 
-        return keymapDirectory.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".txt");
-            }
-        });
+        return Arrays.stream(Objects.requireNonNull(keymapDirectory.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.toLowerCase().endsWith(".txt");
+                }
+            })))
+            .map(file -> FilenameUtils.removeExtension(file.getName()))
+            .toArray(String[]::new);
     }
 }
