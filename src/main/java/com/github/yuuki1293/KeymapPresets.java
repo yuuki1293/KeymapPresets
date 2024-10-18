@@ -139,12 +139,11 @@ public class KeymapPresets implements ModInitializer {
     private static String[] getPresets() {
         final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
 
-        return Arrays.stream(Objects.requireNonNull(keymapDirectory.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.toLowerCase().endsWith(".txt");
-                }
-            })))
+        File[] rawFiles = keymapDirectory.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        if (rawFiles == null)
+            return new String[0];
+
+        return Arrays.stream(rawFiles)
             .map(file -> FilenameUtils.removeExtension(file.getName()))
             .toArray(String[]::new);
     }
