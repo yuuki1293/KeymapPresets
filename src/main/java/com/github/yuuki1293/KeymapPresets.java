@@ -13,9 +13,9 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class KeymapPresets implements ModInitializer {
     public static final String MOD_ID = "keymappresets";
@@ -49,6 +49,13 @@ public class KeymapPresets implements ModInitializer {
                             saveKeymap(presetName);
                             return 1;
                         })))
+                .then(ClientCommandManager.literal("load")
+                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                        .executes(context -> {
+                            final String presetName = StringArgumentType.getString(context, "name");
+                            loadKeymap(presetName);
+                            return 1;
+                        })))
         );
     }
 
@@ -75,5 +82,38 @@ public class KeymapPresets implements ModInitializer {
         } catch (IOException e) {
             LOGGER.error("Couldn't write preset file", e);
         }
+    }
+
+    private void loadKeymap(String presetName) {
+        final File keymapDirectory = new File(client.runDirectory, MOD_ID);
+        final File presetFile = new File(keymapDirectory, presetName + ".txt");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(presetFile))) {
+            for (String line; (line = br.readLine()) != null; ) {
+                String[] split = line.split(":");
+                String translationKey = split[0];
+                String keyName = split[1];
+
+                Optional<KeyBinding> keyBinding = Arrays.stream(client.options.allKeys)
+                    .filter(keyBinding_ -> keyBinding_.getTranslationKey().equals(translationKey))
+                    .findFirst();
+
+                keyBinding.ifPresent(binding -> binding.setBoundKey(InputUtil.fromTranslationKey(keyName)));
+
+            }
+        } catch (Exception e) {
+            LOGGER.info("Keymap file does not exist", e);
+        }
+    }
+
+    private File[] getPresetFiles() {
+        final File keymapDirectory = new File(client.runDirectory, MOD_ID);
+
+        return keymapDirectory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".txt");
+            }
+        });
     }
 }
