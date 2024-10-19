@@ -13,6 +13,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.LiteralText;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 
 public class KeymapPresets implements ModInitializer {
@@ -52,23 +52,23 @@ public class KeymapPresets implements ModInitializer {
         ClientCommandManager.DISPATCHER.register(
             ClientCommandManager.literal("keymap")
                 .then(ClientCommandManager.literal("save")
-                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                    .then(ClientCommandManager.argument("name", StringArgumentType.word())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
                             final String presetName = StringArgumentType.getString(context, "name");
                             if (saveKeymap(presetName))
-                                context.getSource().sendError(new LiteralText("Keymap " + presetName + " can't save."));
+                                context.getSource().sendError(new LiteralText("Failed to save Keymap. Please report the issue to the GitHub repository."));
                             else
                                 context.getSource().sendFeedback(new LiteralText("Keymap " + presetName + " saved!"));
                             return 1;
                         })))
                 .then(ClientCommandManager.literal("load")
-                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                    .then(ClientCommandManager.argument("name", StringArgumentType.word())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
                             final String presetName = StringArgumentType.getString(context, "name");
                             if (loadKeymap(presetName))
-                                context.getSource().sendError(new LiteralText("Keymap " + presetName + " can't load."));
+                                context.getSource().sendError(new LiteralText("Failed to load Keymap " + presetName));
                             else
                                 context.getSource().sendFeedback(new LiteralText("Keymap " + presetName + " loaded!"));
                             return 1;
@@ -77,6 +77,16 @@ public class KeymapPresets implements ModInitializer {
                     .executes(context -> {
                         Arrays.stream(getPresets())
                             .forEach(preset -> context.getSource().sendFeedback(new LiteralText(preset)));
+                        return 1;
+                    }))
+                .then(ClientCommandManager.literal("clear")
+                    .executes(context -> {
+                        FabricClientCommandSource source = context.getSource();
+                        if (clearPresets()) {
+                            source.sendError(new LiteralText("Failed to clear keymap. Please report the issue to the GitHub repository."));
+                        } else {
+                            source.sendFeedback(new LiteralText("Keymaps cleared."));
+                        }
                         return 1;
                     }))
         );
@@ -146,5 +156,16 @@ public class KeymapPresets implements ModInitializer {
         return Arrays.stream(rawFiles)
             .map(file -> FilenameUtils.removeExtension(file.getName()))
             .toArray(String[]::new);
+    }
+
+    private static boolean clearPresets() {
+        final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
+        try {
+            FileUtils.cleanDirectory(keymapDirectory);
+            return false;
+        } catch (IOException e) {
+            LOGGER.error("Couldn't clean preset directory", e);
+            return true;
+        }
     }
 }
