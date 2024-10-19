@@ -52,7 +52,7 @@ public class KeymapPresets implements ModInitializer {
         ClientCommandManager.DISPATCHER.register(
             ClientCommandManager.literal("keymap")
                 .then(ClientCommandManager.literal("save")
-                    .then(ClientCommandManager.argument("name", StringArgumentType.word())
+                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
                             final String presetName = StringArgumentType.getString(context, "name");
@@ -63,7 +63,7 @@ public class KeymapPresets implements ModInitializer {
                             return 1;
                         })))
                 .then(ClientCommandManager.literal("load")
-                    .then(ClientCommandManager.argument("name", StringArgumentType.word())
+                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
                             final String presetName = StringArgumentType.getString(context, "name");
