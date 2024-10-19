@@ -12,7 +12,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandSource;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.glfw.GLFW;
@@ -27,6 +30,8 @@ public class KeymapPresets implements ModInitializer {
     public static final String MOD_ID = "keymappresets";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    public static final String URL_ISSUE = "https://github.com/yuuki1293/KeymapPresets/issues";
+    public static final int COLOR_LINK = 0x0000EE;
     public static final SuggestionProvider<FabricClientCommandSource> SUGGESTION_PROVIDER = (context, builder) -> CommandSource.suggestMatching(
         getPresets(), builder
     );
@@ -55,11 +60,13 @@ public class KeymapPresets implements ModInitializer {
                     .then(ClientCommandManager.argument("name", StringArgumentType.string())
                         .suggests(SUGGESTION_PROVIDER)
                         .executes(context -> {
+                            final var source = context.getSource();
                             final String presetName = StringArgumentType.getString(context, "name");
-                            if (saveKeymap(presetName))
-                                context.getSource().sendError(new LiteralText("Failed to save Keymap. Please report the issue to the GitHub repository."));
-                            else
-                                context.getSource().sendFeedback(new LiteralText("Keymap " + presetName + " saved!"));
+                            if (saveKeymap(presetName)) {
+                                source.sendError(new LiteralText("Failed to save Keymap. Please report the issue to the GitHub repository."));
+                                source.sendFeedback(linkText(URL_ISSUE));
+                            } else
+                                source.sendFeedback(new LiteralText("Keymap " + presetName + " saved!"));
                             return 1;
                         })))
                 .then(ClientCommandManager.literal("load")
@@ -84,6 +91,7 @@ public class KeymapPresets implements ModInitializer {
                         FabricClientCommandSource source = context.getSource();
                         if (clearPresets()) {
                             source.sendError(new LiteralText("Failed to clear keymap. Please report the issue to the GitHub repository."));
+                            source.sendFeedback(linkText(URL_ISSUE));
                         } else {
                             source.sendFeedback(new LiteralText("Keymaps cleared."));
                         }
@@ -168,5 +176,13 @@ public class KeymapPresets implements ModInitializer {
             LOGGER.error("Couldn't clean preset directory", e);
             return true;
         }
+    }
+
+    private static Text linkText(String url) {
+        return new LiteralText(url)
+            .setStyle(Style.EMPTY
+                .withColor(COLOR_LINK)
+                .withUnderline(true)
+                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url)));
     }
 }
