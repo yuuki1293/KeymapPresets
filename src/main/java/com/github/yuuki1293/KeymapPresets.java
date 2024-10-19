@@ -155,6 +155,7 @@ public class KeymapPresets implements ModInitializer {
 
         return Arrays.stream(rawFiles)
             .map(file -> FilenameUtils.removeExtension(file.getName()))
+            .map(preset -> preset.contains(" ") ? "\"" + preset + "\"" : preset) // Add quarts if preset has space.
             .toArray(String[]::new);
     }
 
