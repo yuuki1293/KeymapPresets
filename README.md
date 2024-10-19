@@ -15,3 +15,8 @@
 ```
 /keymap list
 ```
+
+すべてのプリセットを削除
+```
+/keymap clear
+```
