@@ -56,6 +56,12 @@ public class KeymapPresets implements ModInitializer {
 
         ClientCommandManager.DISPATCHER.register(
             ClientCommandManager.literal("keymap")
+                .then(ClientCommandManager.literal("help")
+                    .executes(context -> {
+                        final var source = context.getSource();
+                        source.sendFeedback(linkText("https://github.com/yuuki1293/KeymapPresets/blob/release1.18/README.md"));
+                        return 1;
+                    }))
                 .then(ClientCommandManager.literal("save")
                     .then(ClientCommandManager.argument("name", StringArgumentType.string())
                         .suggests(SUGGESTION_PROVIDER)
