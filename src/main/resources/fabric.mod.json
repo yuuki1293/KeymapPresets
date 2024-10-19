@@ -3,15 +3,15 @@
 	"id": "keymappresets",
 	"version": "${version}",
 	"name": "KeymapPresets",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Create key mapping presets and recall them at any time.",
 	"authors": [
-		"Me!"
+		"yuuki1293"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/yuuki1293/KeymapPresets",
+		"sources": "https://github.com/yuuki1293/KeymapPresets"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/keymappresets/icon.png",
 	"environment": "*",
 	"entrypoints": {
