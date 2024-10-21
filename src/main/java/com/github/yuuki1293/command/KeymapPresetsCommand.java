@@ -73,6 +73,7 @@ public class KeymapPresetsCommand {
 
     private static int commandList(CommandContext<FabricClientCommandSource> context) {
         Arrays.stream(getPresets())
+            .map(preset -> preset.contains(" ") ? "\"" + preset + "\"" : preset) // Add quarts if preset has space.
             .forEach(preset -> context.getSource().sendFeedback(new LiteralText(preset)));
         return 1;
     }
