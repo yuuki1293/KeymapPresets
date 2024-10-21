@@ -15,7 +15,7 @@
 	"icon": "assets/keymappresets/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
+		"client": [
 			"com.github.yuuki1293.KeymapPresets"
 		],
 		"fabric-datagen": [
