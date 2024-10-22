@@ -14,38 +14,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
 public class PresetsMenuMixin {
-    @Unique
-    private static Screen screenPresetsMenu;
-    @Unique
-    private static boolean enableMenu = false;
-
-    @Inject(at = @At("RETURN"), method = "<init>")
-    private void onInit(MinecraftClient client, CallbackInfo ci) {
-        screenPresetsMenu = new KeymapPresetsMenuScreen(PresetsMenuMixin::setEnabledMenu);
-    }
-
     @Inject(at = @At("HEAD"), method = "render")
     private void onRender(MatrixStack matrices, float tickDelta, CallbackInfo info) {
         final var client = KeymapPresets.CLIENT;
+        final var screen = KeymapPresets.screenPresetsMenu;
         final var width = client.getWindow().getScaledWidth();
         final var height = client.getWindow().getScaledHeight();
         final var mouseX = (int)(client.mouse.getX() * (double)width / (double)client.getWindow().getWidth());
         final var mouseY = (int)(client.mouse.getY() * (double)height / (double)client.getWindow().getHeight());
 
         if (KeymapPresets.pressed) {
-            screenPresetsMenu.init(client, width, height);
+            KeymapPresets.screenPresetsMenu.init(client, width, height);
             KeymapPresets.pressed = false;
-            enableMenu = true;
+            screen.visible = true;
         }
 
-        if (KeymapPresets.keyBindingMenu.isPressed() && enableMenu)
-            screenPresetsMenu.render(matrices, mouseX, mouseY, tickDelta);
-        if (!KeymapPresets.keyBindingMenu.isPressed())
-            enableMenu = false;
-    }
-
-    @Unique
-    private static void setEnabledMenu(boolean enabled) {
-        enableMenu = enabled;
+        if (KeymapPresets.keyBindingMenu.isPressed())
+            screen.render(matrices, mouseX, mouseY, tickDelta);
+        else
+            screen.visible = false;
     }
 }

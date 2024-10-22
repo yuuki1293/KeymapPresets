@@ -4,16 +4,14 @@ import com.github.yuuki1293.IOLogic;
 import com.github.yuuki1293.KeymapPresets;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
-import java.util.function.Consumer;
-
 public class KeymapPresetsMenuScreen extends Screen {
-    private final Consumer<Boolean> callback;
+    public boolean visible = false;
 
-    public KeymapPresetsMenuScreen(Consumer<Boolean> callback) {
+    public KeymapPresetsMenuScreen() {
         super(LiteralText.EMPTY);
-        this.callback = callback;
     }
 
     @Override
@@ -28,8 +26,8 @@ public class KeymapPresetsMenuScreen extends Screen {
         final var len = presets.length;
 
         for (int i = 0; i < len; i++) {
-            final int x = x0 + (int) (Math.cos(2 * Math.PI / (double)len * (double)i - Math.PI / 2.0) * radius);
-            final int y = y0 + (int) (Math.sin(2 * Math.PI / (double)len * (double)i - Math.PI / 2.0) * radius);
+            final int x = x0 + (int) (Math.cos(2 * Math.PI / (double) len * (double) i - Math.PI / 2.0) * radius);
+            final int y = y0 + (int) (Math.sin(2 * Math.PI / (double) len * (double) i - Math.PI / 2.0) * radius);
             final var presetName = presets[i];
 
             this.addDrawableChild(new ButtonWidget(x - 25, y - 10, 50, 20, new LiteralText(presetName), button -> {
@@ -49,12 +47,16 @@ public class KeymapPresetsMenuScreen extends Screen {
     }
 
     @Override
-    public void close(){
-        callback.accept(false);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        if (this.visible) {
+            super.render(matrices, mouseX, mouseY, delta);
+        }
     }
 
     @Override
-    public boolean shouldPause() {
-        return false;
+    public void close() {
+        visible = false;
+        if (client != null)
+            client.mouse.lockCursor();
     }
 }
