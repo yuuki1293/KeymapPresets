@@ -1,13 +1,9 @@
 package com.github.yuuki1293.mixin;
 
 import com.github.yuuki1293.KeymapPresets;
-import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

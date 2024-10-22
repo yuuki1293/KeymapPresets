@@ -1,22 +1,25 @@
 # Keymap Presets
-キーマップをセーブ、ロードします。
+Keymap Presets is a client-side mod useful for environments that require frequent key binding changes.  
 
-セーブ
-```
-/keymap save <name>
-```
+### Features
+- Add commands to save and load keymaps.
+- Press the left ALT key (Default) to open the preset selection menu.
 
-ロード
-```
-/keymap load <name>
-```
+### Commands
+- Save preset.
+  "/keymap save &lt;name&gt;"
 
-リスト
-```
-/keymap list
-```
+- Load preset.
+  "/keymap load &lt;name&gt;"
 
-すべてのプリセットを削除
-```
-/keymap clear
-```
+- Clear presets.
+  "/keymap clear"
+
+- Show all presets.
+  "/keymap list"
+
+## F&Q
+- Does this work on the client side?  
+  Yes. Fully works with the client side.
+- I would like to migrate to another instance.  
+  Copy the `.minecraft/keymappresets/` folder to the new instance.  
