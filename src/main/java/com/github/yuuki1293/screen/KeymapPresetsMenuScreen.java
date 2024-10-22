@@ -9,7 +9,7 @@ import net.minecraft.text.LiteralText;
 import java.util.function.Consumer;
 
 public class KeymapPresetsMenuScreen extends Screen {
-    private Consumer<Boolean> callback;
+    private final Consumer<Boolean> callback;
 
     public KeymapPresetsMenuScreen(Consumer<Boolean> callback) {
         super(LiteralText.EMPTY);
