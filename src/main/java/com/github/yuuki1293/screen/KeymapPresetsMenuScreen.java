@@ -6,9 +6,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.LiteralText;
 
+import java.util.function.Consumer;
+
 public class KeymapPresetsMenuScreen extends Screen {
-    public KeymapPresetsMenuScreen() {
+    private Consumer<Boolean> callback;
+
+    public KeymapPresetsMenuScreen(Consumer<Boolean> callback) {
         super(LiteralText.EMPTY);
+        this.callback = callback;
     }
 
     @Override
@@ -41,6 +46,11 @@ public class KeymapPresetsMenuScreen extends Screen {
                 this.close();
             }));
         }
+    }
+
+    @Override
+    public void close(){
+        callback.accept(false);
     }
 
     @Override

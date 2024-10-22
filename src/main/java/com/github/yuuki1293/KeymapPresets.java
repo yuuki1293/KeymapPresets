@@ -1,7 +1,6 @@
 package com.github.yuuki1293;
 
 import com.github.yuuki1293.command.KeymapPresetsCommand;
-import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
 import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -20,7 +19,9 @@ public class KeymapPresets implements ClientModInitializer {
     public static final String URL_ISSUE = "https://github.com/yuuki1293/KeymapPresets/issues";
     public static final int COLOR_LINK = 0x0000EE;
 
-    private static KeyBinding keyBindingMenu;
+    public static KeyBinding keyBindingMenu;
+    public static boolean pressed = false;
+    private static boolean wasPressed = false;
 
     @Override
     public void onInitializeClient() {
@@ -34,9 +35,15 @@ public class KeymapPresets implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (keyBindingMenu.wasPressed()) {
-                client.setScreen(new KeymapPresetsMenuScreen());
+            if (keyBindingMenu.wasPressed()) { // initialize
+                client.mouse.unlockCursor();
+                pressed = true;
             }
+            if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
+                client.mouse.lockCursor();
+            }
+
+            wasPressed = keyBindingMenu.isPressed();
         });
     }
 }
