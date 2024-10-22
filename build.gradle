@@ -2,6 +2,7 @@ plugins {
 	id 'fabric-loom' version '1.8-SNAPSHOT'
 	id 'maven-publish'
 	id "com.modrinth.minotaur" version "2.+"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 version = "${project.minecraft_version}-${project.mod_version}"
@@ -89,7 +90,11 @@ var changelogMD = """
 
 // build.gradle
 modrinth {
-	token = System.getenv("MODRINTH_TOKEN") // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
+	var modrinthToken = System.getenv("MODRINTH_TOKEN");
+	if(modrinthToken == null){
+		token = MODRINTH_TOKEN
+	} else
+		token = modrinthToken // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
 	projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
 	versionNumber = project.version as String // You don't need to set this manually. Will fail if Modrinth has this version already
 	versionType = "beta" // This is the default -- can also be `beta` or `alpha`
@@ -102,5 +107,27 @@ modrinth {
 		// The scope can be `required`, `optional`, `incompatible`, or `embedded`
 		// The type can either be `project` or `version`
 		required.project "fabric-api" // Creates a new required dependency on Fabric API
+	}
+}
+
+curseforge {
+	var curseApiKey = System.getenv("CURSEFORGE_API_KEY")
+	if (curseApiKey == null) {
+		apiKey = CURSEFORGE_API_KEY
+	}else
+		apiKey = curseApiKey
+
+	project {
+		id = '1124297'
+		changelogType = 'markdown'
+		changelog = changelogMD
+		releaseType = 'beta'
+		addGameVersion '1.18.2'
+		relations {
+			requiredDependency 'fabric-api'
+		}
+		mainArtifact(jar) {
+			displayName = project.version
+		}
 	}
 }
