@@ -4,6 +4,7 @@ Keymap Presets is a client-side mod useful for environments that require frequen
 ### Features
 - Add commands to save and load keymaps.
 - Press the left ALT key (Default) to open the preset selection menu.
+![](https://github.com/user-attachments/assets/26c9a49f-03d2-4a54-9c47-b71f77481813)
 
 ### Commands
 - Save preset.
