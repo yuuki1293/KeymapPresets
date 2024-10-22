@@ -90,7 +90,7 @@ var changelogMD = """
 
 // build.gradle
 modrinth {
-	var modrinthToken = System.getenv("MODRINTH_TOKEN");
+	var modrinthToken = System.getenv("MODRINTH_TOKEN")
 	if(modrinthToken == null){
 		token = MODRINTH_TOKEN
 	} else
