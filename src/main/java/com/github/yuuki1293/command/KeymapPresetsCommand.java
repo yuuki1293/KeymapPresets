@@ -18,7 +18,8 @@ import static com.github.yuuki1293.KeymapPresets.*;
 
 public class KeymapPresetsCommand {
     public static final SuggestionProvider<FabricClientCommandSource> SUGGESTION_PROVIDER = (context, builder) -> CommandSource.suggestMatching(
-        getPresets(), builder
+        Arrays.stream(getPresets()).map(KeymapPresetsCommand::fixBadString)
+        , builder
     );
 
     public static void register() {
@@ -73,7 +74,7 @@ public class KeymapPresetsCommand {
 
     private static int commandList(CommandContext<FabricClientCommandSource> context) {
         Arrays.stream(getPresets())
-            .map(preset -> preset.contains(" ") ? "\"" + preset + "\"" : preset) // Add quarts if preset has space.
+            .map(KeymapPresetsCommand::fixBadString)
             .forEach(preset -> context.getSource().sendFeedback(new LiteralText(preset)));
         return 1;
     }
@@ -95,5 +96,13 @@ public class KeymapPresetsCommand {
                 .withColor(COLOR_LINK)
                 .withUnderline(true)
                 .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url)));
+    }
+
+    private static String fixBadString(String s){
+        if (s.contains(" ") // contain space
+            || s.matches(".*[^\u0000-\u007F].*")) // contain multibyte character
+            return "\"" + s + "\"";
+        else
+            return s;
     }
 }
