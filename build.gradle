@@ -81,9 +81,10 @@ publishing {
     }
 }
 
-var changelogMD = """
+var changelogMD = """## Feature
+- Add support lang 'en_us, ja_jp'
+
 ## Fix
-- Support multibyte character.
 
 **Full Changelog**: https://github.com/yuuki1293/KeymapPresets/compare/1.18.2-0.2.0...1.18.2-0.2.1
 """
