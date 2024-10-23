@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 public class KeymapPresetsMenuScreen extends Screen {
     public boolean visible = false;
@@ -38,9 +39,9 @@ public class KeymapPresetsMenuScreen extends Screen {
                 }
 
                 if (IOLogic.loadKeymap(presetName))
-                    player.sendMessage(new LiteralText("Failed to load Keymap " + presetName), true);
+                    player.sendMessage(new TranslatableText("text.keymappresets.load_failure", presetName), true);
                 else
-                    player.sendMessage(new LiteralText("Keymap " + presetName + " loaded!"), true);
+                    player.sendMessage(new TranslatableText("text.keymappresets.load_success", presetName), true);
                 this.close();
             }));
         }

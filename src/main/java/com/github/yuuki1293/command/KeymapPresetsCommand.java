@@ -6,10 +6,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 
 import java.util.Arrays;
 
@@ -56,19 +53,19 @@ public class KeymapPresetsCommand {
         final var source = context.getSource();
         final String presetName = StringArgumentType.getString(context, "name");
         if (saveKeymap(presetName)) {
-            source.sendError(new LiteralText("Failed to save Keymap. Please report the issue to the GitHub repository."));
+            source.sendError(new TranslatableText("text.keymappresets.save_failure", presetName));
             source.sendFeedback(linkText(URL_ISSUE));
         } else
-            source.sendFeedback(new LiteralText("Keymap " + presetName + " saved!"));
+            source.sendFeedback(new TranslatableText("text.keymappresets.save_success", presetName));
         return 1;
     }
 
     private static int commandLoad(CommandContext<FabricClientCommandSource> context) {
         final String presetName = StringArgumentType.getString(context, "name");
         if (loadKeymap(presetName))
-            context.getSource().sendError(new LiteralText("Failed to load Keymap " + presetName));
+            context.getSource().sendError(new TranslatableText("text.keymappresets.load_failure", presetName));
         else
-            context.getSource().sendFeedback(new LiteralText("Keymap " + presetName + " loaded!"));
+            context.getSource().sendFeedback(new TranslatableText("text.keymappresets.load_success", presetName));
         return 1;
     }
 
@@ -82,10 +79,10 @@ public class KeymapPresetsCommand {
     private static int commandClear(CommandContext<FabricClientCommandSource> context) {
         FabricClientCommandSource source = context.getSource();
         if (clearPresets()) {
-            source.sendError(new LiteralText("Failed to clear keymap. Please report the issue to the GitHub repository."));
+            source.sendError(new TranslatableText("text.keymappresets.clear_failure"));
             source.sendFeedback(linkText(URL_ISSUE));
         } else {
-            source.sendFeedback(new LiteralText("Keymaps cleared."));
+            source.sendFeedback(new LiteralText("text.keymappresets.clear_success"));
         }
         return 1;
     }

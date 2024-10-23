@@ -1,4 +1,10 @@
 {
   "category.keymappresets.generic": "Keymap Presets",
-  "key.keymappresets.open_menu": "Open Presets Menu"
+  "key.keymappresets.open_menu": "Open Presets Menu",
+  "text.keymappresets.load_failure": "Failed to load Keymap %s",
+  "text.keymappresets.load_success": "Preset %s loaded!",
+  "text.keymappresets.save_failure": "Failed to save preset %s. Please report the issue to the GitHub repository.",
+  "text.keymappresets.save_success": "Preset %s saved!",
+  "text.keymappresets.clear_failure": "Failed to clear presets. Please report the issue to the GitHub repository.",
+  "text.keymappresets.clear_success": "Presets cleared."
 }

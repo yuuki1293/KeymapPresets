@@ -1,4 +1,10 @@
 {
   "category.keymappresets.generic": "Keymap Presets",
-  "key.keymappresets.open_menu": "プリセットメニューを開く"
+  "key.keymappresets.open_menu": "プリセットメニューを開く",
+  "text.keymappresets.load_failure": "プリセット %s のロードに失敗しました",
+  "text.keymappresets.load_success": "プリセット %s をロードしました",
+  "text.keymappresets.save_failure": "プリセット %s のセーブに失敗しました。GitHubリポジトリに問題を報告してください",
+  "text.keymappresets.save_success": "プリセット %s をロードしました",
+  "text.keymappresets.clear_failure": "プリセットの削除に失敗しました。GitHubリポジトリに問題を報告してください",
+  "text.keymappresets.clear_success": "全てのプリセットを削除しました"
 }
