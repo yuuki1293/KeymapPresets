@@ -7,6 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Optional;
 
 import static com.github.yuuki1293.KeymapPresets.*;
@@ -74,6 +75,7 @@ public class IOLogic {
             return new String[0];
 
         return Arrays.stream(rawFiles)
+            .sorted(Comparator.comparingLong(File::lastModified))
             .map(file -> FilenameUtils.removeExtension(file.getName()))
             .toArray(String[]::new);
     }
