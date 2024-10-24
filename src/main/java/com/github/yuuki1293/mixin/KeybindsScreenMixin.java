@@ -1,7 +1,6 @@
 package com.github.yuuki1293.mixin;
 
 import com.github.yuuki1293.IOLogic;
-import com.github.yuuki1293.KeymapPresets;
 import com.github.yuuki1293.screen.EditPresetWidget;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
