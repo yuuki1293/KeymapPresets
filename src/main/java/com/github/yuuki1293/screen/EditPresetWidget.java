@@ -28,9 +28,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         this.y = y;
         this.width = width;
         this.height = height;
-        selectedButton = new ButtonWidget(this.x, this.y, 150, 20, new LiteralText("Select"), button -> {
-            showButtons();
-        });
+        selectedButton = new ButtonWidget(this.x, this.y, 150, 20, new LiteralText("Select"), button -> showButtons());
     }
 
     @Override
