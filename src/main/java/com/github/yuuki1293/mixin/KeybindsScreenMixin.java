@@ -44,7 +44,7 @@ public class KeybindsScreenMixin extends Screen {
 
     @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V"), index = 5)
     private ButtonWidget.PressAction injectDone(int i, int j, int k, int l, Text text, ButtonWidget.PressAction pressAction) {
-        if (text == ScreenTexts.DONE) {
+        if (text.equals(ScreenTexts.DONE)) {
             return button -> {
                 pressAction.onPress(button);
                 IOLogic.saveKeymap(editPresetWidget.getSelected());
