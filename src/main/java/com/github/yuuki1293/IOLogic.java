@@ -13,12 +13,13 @@ import java.util.Optional;
 import static com.github.yuuki1293.KeymapPresets.*;
 
 public class IOLogic {
+    private static final File DIR_KEYMAPPRESETS = new File(CLIENT.runDirectory, MOD_ID);
+
     public static boolean saveKeymap(String presetName) {
-        final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
-        final File presetFile = new File(keymapDirectory, presetName + ".txt");
+        final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try {
-            if (keymapDirectory.mkdirs())
+            if (DIR_KEYMAPPRESETS.mkdirs())
                 LOGGER.info("Created keymap directory");
 
             if (presetFile.createNewFile())
@@ -42,8 +43,7 @@ public class IOLogic {
     }
 
     public static boolean loadKeymap(String presetName) {
-        final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
-        final File presetFile = new File(keymapDirectory, presetName + ".txt");
+        final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try (BufferedReader br = new BufferedReader(new FileReader(presetFile))) {
             for (String line; (line = br.readLine()) != null; ) {
