@@ -2,6 +2,8 @@ package com.github.yuuki1293;
 
 import com.github.yuuki1293.command.KeymapPresetsCommand;
 import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -48,5 +50,7 @@ public class KeymapPresets implements ClientModInitializer {
 
             wasPressed = keyBindingMenu.isPressed();
         });
+
+        AutoConfig.register(KeymapPresetsConfig.class, Toml4jConfigSerializer::new);
     }
 }
