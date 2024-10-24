@@ -52,7 +52,10 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         final int x = this.x;
         int y = this.y + 20;
         for (var preset : presets) {
-            buttons.add(new ButtonWidget(x, y, 150, 20, new LiteralText(preset), button -> IOLogic.loadKeymap(preset)));
+            buttons.add(new ButtonWidget(x, y, 150, 20, new LiteralText(preset), button -> {
+                closeButtons();
+                IOLogic.loadKeymap(preset);
+            }));
             y += 20;
         }
     }

@@ -33,6 +33,8 @@ public class KeybindsScreenMixin extends Screen {
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
     private void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        editPresetWidget.closeButtons();
+        final var isHovered = editPresetWidget.children().stream().anyMatch(b -> b.isMouseOver(mouseX, mouseY));
+        if (!isHovered)
+            editPresetWidget.closeButtons();
     }
 }
