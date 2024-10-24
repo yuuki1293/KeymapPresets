@@ -1,8 +1,10 @@
 package com.github.yuuki1293.mixin;
 
 import com.github.yuuki1293.IOLogic;
+import com.github.yuuki1293.KeymapPresets;
 import com.github.yuuki1293.screen.EditPresetWidget;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.option.KeybindsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -42,10 +44,14 @@ public class KeybindsScreenMixin extends Screen {
     }
 
     @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V"), index = 5)
-    private ButtonWidget.PressAction injectDone(ButtonWidget.PressAction pressAction) {
-        return button -> {
-            pressAction.onPress(button);
-            IOLogic.saveKeymap(editPresetWidget.getSelected());
-        };
+    private ButtonWidget.PressAction injectDone(int i, int j, int k, int l, Text text, ButtonWidget.PressAction pressAction) {
+        if (text == ScreenTexts.DONE) {
+            return button -> {
+                pressAction.onPress(button);
+                IOLogic.saveKeymap(editPresetWidget.getSelected());
+            };
+        }
+
+        return pressAction;
     }
 }
