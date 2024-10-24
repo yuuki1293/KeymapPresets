@@ -5,5 +5,5 @@ import me.shedaniel.autoconfig.annotation.Config;
 
 @Config(name = KeymapPresets.MOD_ID)
 public class KeymapPresetsConfig implements ConfigData {
-    String selectedPreset = "";
+    public String selectedPreset = "";
 }

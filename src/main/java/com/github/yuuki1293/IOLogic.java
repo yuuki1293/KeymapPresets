@@ -35,6 +35,8 @@ public class IOLogic {
                 String keymap = String.format("%s:%s", key.getTranslationKey(), key.getBoundKeyTranslationKey());
                 fileWriter.append(keymap).append("\n");
             }
+            CONFIG.get().selectedPreset = presetName;
+            CONFIG.save();
             return false;
         } catch (IOException e) {
             LOGGER.error("Couldn't write preset file", e);
@@ -59,10 +61,12 @@ public class IOLogic {
 
             }
 
+            CONFIG.get().selectedPreset = presetName;
+            CONFIG.save();
             KeyBinding.updateKeysByCode();
             return false;
         } catch (Exception e) {
-            LOGGER.info("Keymap file does not exist", e);
+            LOGGER.warn("Keymap file does not exist", e);
             return true;
         }
     }
@@ -84,6 +88,8 @@ public class IOLogic {
         final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
         try {
             FileUtils.cleanDirectory(keymapDirectory);
+            CONFIG.get().selectedPreset = "";
+            CONFIG.save();
             return false;
         } catch (IOException e) {
             LOGGER.error("Couldn't clean preset directory", e);

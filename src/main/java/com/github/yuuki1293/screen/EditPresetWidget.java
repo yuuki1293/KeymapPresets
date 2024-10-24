@@ -1,6 +1,7 @@
 package com.github.yuuki1293.screen;
 
 import com.github.yuuki1293.IOLogic;
+import com.github.yuuki1293.KeymapPresets;
 import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -28,7 +29,9 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         this.y = y;
         this.width = width;
         this.height = height;
-        selectedButton = new ButtonWidget(this.x, this.y, 150, 20, new LiteralText("Select"), button -> showButtons());
+        final var config = KeymapPresets.CONFIG.get();
+        selectedButton = new ButtonWidget(this.x, this.y, 150, 20,
+            new LiteralText(config.selectedPreset), button -> showButtons());
     }
 
     @Override
@@ -55,6 +58,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             buttons.add(new ButtonWidget(x, y, 150, 20, new LiteralText(preset), button -> {
                 closeButtons();
                 IOLogic.loadKeymap(preset);
+                final var config = KeymapPresets.CONFIG.get();
+                selectedButton.setMessage(new LiteralText(config.selectedPreset));
             }));
             y += 20;
         }
@@ -72,5 +77,9 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
     @Override
     public SelectionType getType() {
         return SelectionType.NONE;
+    }
+
+    public String getSelected(){
+        return selectedButton.getMessage().getString();
     }
 }

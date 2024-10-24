@@ -3,6 +3,7 @@ package com.github.yuuki1293;
 import com.github.yuuki1293.command.KeymapPresetsCommand;
 import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 
@@ -22,6 +23,7 @@ public class KeymapPresets implements ClientModInitializer {
     public static final String URL_ISSUE = "https://github.com/yuuki1293/KeymapPresets/issues";
     public static final int COLOR_LINK = 0x0000EE;
 
+    public static ConfigHolder<KeymapPresetsConfig> CONFIG;
     public static KeymapPresetsMenuScreen screenPresetsMenu;
     public static KeyBinding keyBindingMenu;
     public static boolean pressed = false;
@@ -52,5 +54,7 @@ public class KeymapPresets implements ClientModInitializer {
         });
 
         AutoConfig.register(KeymapPresetsConfig.class, Toml4jConfigSerializer::new);
+        CONFIG = AutoConfig.getConfigHolder(KeymapPresetsConfig.class);
+        IOLogic.loadKeymap(CONFIG.get().selectedPreset);
     }
 }
