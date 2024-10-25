@@ -30,14 +30,14 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         this.width = width;
         this.height = height;
         final var config = KeymapPresets.CONFIG.get();
-        selectedButton = new ButtonWidget(this.x, this.y, 150, 20,
+        this.selectedButton = new ButtonWidget(this.x, this.y, 150, 20,
             new LiteralText(config.selectedPreset), button -> showButtons());
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        selectedButton.render(matrices, mouseX, mouseY, delta);
         selectedButton.active = buttons.isEmpty();
+        selectedButton.render(matrices, mouseX, mouseY, delta);
         for (ButtonWidget button : buttons) {
             button.render(matrices, mouseX, mouseY, delta);
         }
@@ -63,6 +63,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             }));
             y += 20;
         }
+        IOLogic.saveKeymap(getSelected());
     }
 
     public void closeButtons() {
