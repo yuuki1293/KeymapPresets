@@ -55,6 +55,5 @@ public class KeymapPresets implements ClientModInitializer {
 
         AutoConfig.register(KeymapPresetsConfig.class, Toml4jConfigSerializer::new);
         CONFIG = AutoConfig.getConfigHolder(KeymapPresetsConfig.class);
-        IOLogic.loadKeymap(CONFIG.get().selectedPreset);
     }
 }
