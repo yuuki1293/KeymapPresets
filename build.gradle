@@ -88,6 +88,7 @@ publishing {
 
 var changelogMD = """## Feature
 - Add Preset Edit widget in Keybinds screen
+- Add rename command
 
 ## Fix
 
