@@ -6,5 +6,7 @@
   "text.keymappresets.save_failure": "Failed to save preset %s. Please report the issue to the GitHub repository.",
   "text.keymappresets.save_success": "Preset %s saved!",
   "text.keymappresets.clear_failure": "Failed to clear presets. Please report the issue to the GitHub repository.",
-  "text.keymappresets.clear_success": "Presets cleared."
+  "text.keymappresets.clear_success": "Presets cleared.",
+  "text.keymappresets.rename_failure": "Preset %s already exists.",
+  "text.keymappresets.rename_success": "%s rename to %s !"
 }

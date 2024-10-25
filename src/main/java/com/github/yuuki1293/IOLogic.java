@@ -6,6 +6,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
@@ -72,9 +74,7 @@ public class IOLogic {
     }
 
     public static String[] getPresets() {
-        final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
-
-        File[] rawFiles = keymapDirectory.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        File[] rawFiles = DIR_KEYMAPPRESETS.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
         if (rawFiles == null)
             return new String[0];
 
@@ -85,14 +85,32 @@ public class IOLogic {
     }
 
     public static boolean clearPresets() {
-        final File keymapDirectory = new File(CLIENT.runDirectory, MOD_ID);
         try {
-            FileUtils.cleanDirectory(keymapDirectory);
+            FileUtils.cleanDirectory(DIR_KEYMAPPRESETS);
             CONFIG.get().selectedPreset = "";
             CONFIG.save();
             return false;
         } catch (IOException e) {
             LOGGER.error("Couldn't clean preset directory", e);
+            return true;
+        }
+    }
+
+    public static boolean movePresets(String presetName, String newName, boolean simulation) {
+        final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
+        final File newFile = new File(DIR_KEYMAPPRESETS, newName + ".txt");
+
+        if(simulation) {
+            return newFile.exists();
+        }
+
+        try {
+            Files.move(presetFile.toPath(), newFile.toPath());
+            return false;
+        } catch (FileAlreadyExistsException e) {
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("Couldn't move preset file", e);
             return true;
         }
     }

@@ -1,5 +1,6 @@
 package com.github.yuuki1293.command;
 
+import com.github.yuuki1293.IOLogic;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -40,6 +41,12 @@ public class KeymapPresetsCommand {
 
                 .then(ClientCommandManager.literal("clear")
                     .executes(KeymapPresetsCommand::commandClear))
+
+                .then(ClientCommandManager.literal("rename")
+                    .then(ClientCommandManager.argument("old", StringArgumentType.string())
+                        .suggests(SUGGESTION_PROVIDER)
+                        .then(ClientCommandManager.argument("new", StringArgumentType.string())
+                            .executes(KeymapPresetsCommand::commandRename))))
         );
     }
 
@@ -82,7 +89,19 @@ public class KeymapPresetsCommand {
             source.sendError(new TranslatableText("text.keymappresets.clear_failure"));
             source.sendFeedback(linkText(URL_ISSUE));
         } else {
-            source.sendFeedback(new LiteralText("text.keymappresets.clear_success"));
+            source.sendFeedback(new TranslatableText("text.keymappresets.clear_success"));
+        }
+        return 1;
+    }
+
+    private static int commandRename(CommandContext<FabricClientCommandSource> context) {
+        FabricClientCommandSource source = context.getSource();
+        final String presetName = StringArgumentType.getString(context, "old");
+        final String newName = StringArgumentType.getString(context, "new");
+        if (IOLogic.movePresets(presetName, newName, false)){
+            source.sendError(new TranslatableText("text.keymappresets.rename_failure", newName));
+        } else {
+            source.sendFeedback(new TranslatableText("text.keymappresets.rename_success", presetName, newName));
         }
         return 1;
     }
