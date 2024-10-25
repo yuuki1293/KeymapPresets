@@ -53,4 +53,10 @@ public class KeybindsScreenMixin extends Screen {
 
         return pressAction;
     }
+
+    @Override
+    public void close(){
+        super.close();
+        IOLogic.saveKeymap(editPresetWidget.getSelected());
+    }
 }
