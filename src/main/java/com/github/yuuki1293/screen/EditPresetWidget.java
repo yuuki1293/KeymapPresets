@@ -47,9 +47,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         this.y = y;
         this.width = width;
         this.height = height;
-        final var config = CONFIG.get();
         this.selectedButton = new ButtonWidget(this.x, this.y, 150, 20,
-            new LiteralText(config.selectedPreset), button -> showButtons());
+            new LiteralText(CONFIG.get().selectedPreset), button -> showButtons());
         this.renameField = new RenameFieldWidget(CLIENT.textRenderer, this.x, this.y, 150, 20, new LiteralText(getSelected()));
         this.renameField.visible = false;
         this.renameButton = new InFocusedButtonWidget(this.x + this.width / 2 + 49, this.y, 20, 20, new LiteralText("R"), button -> {
@@ -117,8 +116,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
                 closeButtons();
                 IOLogic.save(getSelected());
                 IOLogic.load(preset);
-                final var config = CONFIG.get();
-                selectedButton.setMessage(new LiteralText(config.selectedPreset));
+                selectedButton.setMessage(new LiteralText(CONFIG.get().selectedPreset));
             }));
             y += 20;
         }
