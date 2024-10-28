@@ -18,6 +18,11 @@ public class IOLogic {
     private static final File DIR_KEYMAPPRESETS = new File(CLIENT.runDirectory, MOD_ID);
 
     public static boolean save(String presetName) {
+        if (presetName == null || presetName.isEmpty()) {
+            logNull();
+            return true;
+        }
+
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try {
@@ -47,6 +52,11 @@ public class IOLogic {
     }
 
     public static boolean load(String presetName) {
+        if (presetName == null || presetName.isEmpty()) {
+            logNull();
+            return true;
+        }
+
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try (BufferedReader br = new BufferedReader(new FileReader(presetFile))) {
@@ -97,6 +107,11 @@ public class IOLogic {
     }
 
     public static boolean move(String presetName, String newName, boolean simulation) {
+        if (presetName == null || presetName.isEmpty()) {
+            logNull();
+            return true;
+        }
+
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
         final File newFile = new File(DIR_KEYMAPPRESETS, newName + ".txt");
 
@@ -120,12 +135,17 @@ public class IOLogic {
     }
 
     public static boolean delete(String presetName) {
+        if (presetName == null || presetName.isEmpty()) {
+            logNull();
+            return true;
+        }
+
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try {
             FileUtils.delete(presetFile);
             final var next = Arrays.stream(getNames()).findFirst();
-            if(next.isPresent()) {
+            if (next.isPresent()) {
                 IOLogic.load(next.get());
             } else {
                 CONFIG.get().selectedPreset = "";
@@ -150,5 +170,9 @@ public class IOLogic {
         }
 
         return presetName;
+    }
+
+    private static void logNull() {
+        LOGGER.error("Preset name is null");
     }
 }
