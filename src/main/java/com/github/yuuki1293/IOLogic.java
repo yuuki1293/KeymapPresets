@@ -100,6 +100,10 @@ public class IOLogic {
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
         final File newFile = new File(DIR_KEYMAPPRESETS, newName + ".txt");
 
+        if(presetName.equals(newName)) {
+            return false;
+        }
+
         if(simulation) {
             return newFile.exists();
         }
