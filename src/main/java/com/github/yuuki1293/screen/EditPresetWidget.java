@@ -2,6 +2,7 @@ package com.github.yuuki1293.screen;
 
 import com.github.yuuki1293.IOLogic;
 import com.github.yuuki1293.KeymapPresets;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EditPresetWidget extends AbstractParentElement implements Drawable, Selectable {
+    private static MinecraftClient CLIENT = KeymapPresets.CLIENT;
     protected int x;
     protected int y;
     protected int width;
@@ -44,7 +46,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         final var config = KeymapPresets.CONFIG.get();
         this.selectedButton = new ButtonWidget(this.x, this.y, 150, 20,
             new LiteralText(config.selectedPreset), button -> showButtons());
-        this.renameField = new RenameFieldWidget(KeymapPresets.CLIENT.textRenderer, this.x, this.y, 150, 20, new LiteralText(getSelected()));
+        this.renameField = new RenameFieldWidget(CLIENT.textRenderer, this.x, this.y, 150, 20, new LiteralText(getSelected()));
         this.renameField.visible = false;
         this.renameButton = new ButtonWidget(this.x + this.width / 2 + 5, this.y, 20, 20, new LiteralText("R"), button -> {
             selectedButton.visible = false;
@@ -54,7 +56,10 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             renameField.setText(getSelected());
             renameField.setSelectionStart(0);
             renameField.setTextFieldFocused(true);
-            renameField.setCursorToEnd();
+        }, (button, matrices, mouseX, mouseY) -> {
+            if(button.active){
+                parent.renderOrderedTooltip(matrices, List.of(OrderedText.styledForwardsVisitedString("Rename", Style.EMPTY)), mouseX, mouseY);
+            }
         }) {
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
