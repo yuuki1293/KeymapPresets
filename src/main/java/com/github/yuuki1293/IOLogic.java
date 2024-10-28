@@ -125,7 +125,12 @@ public class IOLogic {
         try {
             FileUtils.delete(presetFile);
             final var next = Arrays.stream(getNames()).findFirst();
-            next.ifPresent(IOLogic::load);
+            if(next.isPresent()) {
+                IOLogic.load(next.get());
+            } else {
+                CONFIG.get().selectedPreset = "";
+                CONFIG.save();
+            }
             return false;
         } catch (IOException e) {
             LOGGER.error("Couldn't delete preset", e);
