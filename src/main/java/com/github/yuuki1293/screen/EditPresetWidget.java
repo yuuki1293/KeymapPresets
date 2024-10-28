@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EditPresetWidget extends AbstractParentElement implements Drawable, Selectable {
-    private static MinecraftClient CLIENT = KeymapPresets.CLIENT;
+    private final static MinecraftClient CLIENT = KeymapPresets.CLIENT;
     protected int x;
     protected int y;
     protected int width;
