@@ -35,6 +35,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
     protected int height;
     private final ArrayList<ButtonWidget> buttons = new ArrayList<>(0);
     private final ButtonWidget selectedButton;
+    private final ButtonWidget addButton;
     private final ButtonWidget renameButton;
     private final TextFieldWidget renameField;
 
@@ -48,7 +49,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             new LiteralText(config.selectedPreset), button -> showButtons());
         this.renameField = new RenameFieldWidget(CLIENT.textRenderer, this.x, this.y, 150, 20, new LiteralText(getSelected()));
         this.renameField.visible = false;
-        this.renameButton = new ButtonWidget(this.x + this.width / 2 + 49, this.y, 20, 20, new LiteralText("R"), button -> {
+        this.renameButton = new InFocusedButtonWidget(this.x + this.width / 2 + 49, this.y, 20, 20, new LiteralText("R"), button -> {
             selectedButton.visible = false;
             parent.focusOn(renameField);
             this.focusOn(renameField);
@@ -57,16 +58,16 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             renameField.setSelectionStart(0);
             renameField.setTextFieldFocused(true);
         }, (button, matrices, mouseX, mouseY) -> {
-            if(button.active){
+            if (button.active) {
                 parent.renderOrderedTooltip(matrices, List.of(OrderedText.styledForwardsVisitedString("Rename", Style.EMPTY)), mouseX, mouseY);
             }
-        }) {
-            @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                super.mouseClicked(mouseX, mouseY, button);
-                return false;
-            }
-        };
+        });
+        this.addButton = new InFocusedButtonWidget(this.x + this.width / 2 + 5, this.y, 20, 20, new LiteralText("+"), button -> {
+            final var name = IOLogic.genPrimaryName("New Preset");
+            IOLogic.saveKeymap(name);
+            selectedButton.setMessage(new LiteralText(name));
+            renameButton.onPress();
+        });
     }
 
     @Override
@@ -79,6 +80,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         renameButton.active = !renameField.isActive();
         renameButton.render(matrices, mouseX, mouseY, delta);
         renameField.render(matrices, mouseX, mouseY, delta);
+        addButton.active = !renameField.isActive();
+        addButton.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
@@ -86,7 +89,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         final Element[] children = {
             selectedButton,
             renameField,
-            renameButton
+            renameButton,
+            addButton
         };
         return Stream.concat(buttons.stream(),
                 Arrays.stream(children))
@@ -116,7 +120,6 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
 
     @Override
     public void appendNarrations(NarrationMessageBuilder builder) {
-
     }
 
     @Override
@@ -188,6 +191,22 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
                 selectedButton.visible = true;
             }
             return ret;
+        }
+    }
+
+    private static class InFocusedButtonWidget extends ButtonWidget {
+        public InFocusedButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress) {
+            super(x, y, width, height, message, onPress);
+        }
+
+        public InFocusedButtonWidget(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress, ButtonWidget.TooltipSupplier tooltipSupplier) {
+            super(x, y, width, height, message, onPress, tooltipSupplier);
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            super.mouseClicked(mouseX, mouseY, button);
+            return false;
         }
     }
 }

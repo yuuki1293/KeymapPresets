@@ -100,11 +100,11 @@ public class IOLogic {
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
         final File newFile = new File(DIR_KEYMAPPRESETS, newName + ".txt");
 
-        if(presetName.equals(newName)) {
+        if (presetName.equals(newName)) {
             return false;
         }
 
-        if(simulation) {
+        if (simulation) {
             return newFile.exists();
         }
 
@@ -117,5 +117,19 @@ public class IOLogic {
             LOGGER.error("Couldn't move preset file", e);
             return true;
         }
+    }
+
+    public static String genPrimaryName(String primary) {
+        var presetName = primary;
+        int i = 1;
+        File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
+
+        while (presetFile.exists()) {
+            presetName = primary + " " + i;
+            presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
+            i++;
+        }
+
+        return presetName;
     }
 }
