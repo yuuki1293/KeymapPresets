@@ -76,6 +76,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         for (ButtonWidget button : buttons) {
             button.render(matrices, mouseX, mouseY, delta);
         }
+        renameButton.active = !renameField.isActive();
         renameButton.render(matrices, mouseX, mouseY, delta);
         renameField.render(matrices, mouseX, mouseY, delta);
     }
@@ -177,14 +178,14 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
             final var ret = super.mouseClicked(mouseX, mouseY, button);
 
-            if (!this.isActive())
+            if (!this.isVisible())
                 return ret;
 
             if (!this.isHovered()) {
                 if (!IOLogic.movePresets(getSelected(), this.getText(), false))
                     selectedButton.setMessage(new LiteralText(this.getText()));
                 this.setVisible(false);
-
+                selectedButton.visible = true;
             }
             return ret;
         }
