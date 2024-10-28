@@ -17,9 +17,6 @@
 	"entrypoints": {
 		"client": [
 			"com.github.yuuki1293.KeymapPresets"
-		],
-		"fabric-datagen": [
-			"com.github.yuuki1293.KeymapPresetsDataGenerator"
 		]
 	},
 	"mixins": [
