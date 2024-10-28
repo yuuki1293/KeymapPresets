@@ -11,12 +11,11 @@ import net.minecraft.text.*;
 
 import java.util.Arrays;
 
-import static com.github.yuuki1293.IOLogic.*;
 import static com.github.yuuki1293.KeymapPresets.*;
 
 public class KeymapPresetsCommand {
     public static final SuggestionProvider<FabricClientCommandSource> SUGGESTION_PROVIDER = (context, builder) -> CommandSource.suggestMatching(
-        Arrays.stream(getPresets()).map(KeymapPresetsCommand::fixBadString)
+        Arrays.stream(IOLogic.getNames()).map(KeymapPresetsCommand::fixBadString)
         , builder
     );
 
@@ -47,6 +46,11 @@ public class KeymapPresetsCommand {
                         .suggests(SUGGESTION_PROVIDER)
                         .then(ClientCommandManager.argument("new", StringArgumentType.string())
                             .executes(KeymapPresetsCommand::commandRename))))
+
+                .then(ClientCommandManager.literal("delete")
+                    .then(ClientCommandManager.argument("name", StringArgumentType.string())
+                        .suggests(SUGGESTION_PROVIDER)
+                        .executes(KeymapPresetsCommand::commandDelete)))
         );
     }
 
@@ -59,7 +63,7 @@ public class KeymapPresetsCommand {
     private static int commandSave(CommandContext<FabricClientCommandSource> context) {
         final var source = context.getSource();
         final String presetName = StringArgumentType.getString(context, "name");
-        if (saveKeymap(presetName)) {
+        if (IOLogic.save(presetName)) {
             source.sendError(new TranslatableText("text.keymappresets.save_failure", presetName));
             source.sendFeedback(linkText(URL_ISSUE));
         } else
@@ -69,7 +73,7 @@ public class KeymapPresetsCommand {
 
     private static int commandLoad(CommandContext<FabricClientCommandSource> context) {
         final String presetName = StringArgumentType.getString(context, "name");
-        if (loadKeymap(presetName))
+        if (IOLogic.load(presetName))
             context.getSource().sendError(new TranslatableText("text.keymappresets.load_failure", presetName));
         else
             context.getSource().sendFeedback(new TranslatableText("text.keymappresets.load_success", presetName));
@@ -77,7 +81,7 @@ public class KeymapPresetsCommand {
     }
 
     private static int commandList(CommandContext<FabricClientCommandSource> context) {
-        Arrays.stream(getPresets())
+        Arrays.stream(IOLogic.getNames())
             .map(KeymapPresetsCommand::fixBadString)
             .forEach(preset -> context.getSource().sendFeedback(new LiteralText(preset)));
         return 1;
@@ -85,7 +89,7 @@ public class KeymapPresetsCommand {
 
     private static int commandClear(CommandContext<FabricClientCommandSource> context) {
         FabricClientCommandSource source = context.getSource();
-        if (clearPresets()) {
+        if (IOLogic.clear()) {
             source.sendError(new TranslatableText("text.keymappresets.clear_failure"));
             source.sendFeedback(linkText(URL_ISSUE));
         } else {
@@ -98,10 +102,22 @@ public class KeymapPresetsCommand {
         FabricClientCommandSource source = context.getSource();
         final String presetName = StringArgumentType.getString(context, "old");
         final String newName = StringArgumentType.getString(context, "new");
-        if (IOLogic.movePresets(presetName, newName, false)){
+        if (IOLogic.move(presetName, newName, false)){
             source.sendError(new TranslatableText("text.keymappresets.rename_failure", newName));
         } else {
             source.sendFeedback(new TranslatableText("text.keymappresets.rename_success", presetName, newName));
+        }
+        return 1;
+    }
+
+    private static int commandDelete(CommandContext<FabricClientCommandSource> context) {
+        FabricClientCommandSource source = context.getSource();
+        final String presetName = StringArgumentType.getString(context, "name");
+        if (IOLogic.delete(presetName)) {
+            source.sendError(new TranslatableText("text.keymappresets.delete_failure"));
+            source.sendFeedback(linkText(URL_ISSUE));
+        } else {
+            source.sendFeedback(new TranslatableText("text.keymappresets.delete_success"));
         }
         return 1;
     }

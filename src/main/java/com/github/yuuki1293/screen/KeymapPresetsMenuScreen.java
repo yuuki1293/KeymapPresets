@@ -23,7 +23,7 @@ public class KeymapPresetsMenuScreen extends Screen {
         final var y0 = this.height / 2;
         final double radius = this.height / 3.0;
 
-        final var presets = IOLogic.getPresets();
+        final var presets = IOLogic.getNames();
         final var len = presets.length;
 
         for (int i = 0; i < len; i++) {
@@ -38,7 +38,7 @@ public class KeymapPresetsMenuScreen extends Screen {
                     return;
                 }
 
-                if (IOLogic.loadKeymap(presetName))
+                if (IOLogic.load(presetName))
                     player.sendMessage(new TranslatableText("text.keymappresets.load_failure", presetName), true);
                 else
                     player.sendMessage(new TranslatableText("text.keymappresets.load_success", presetName), true);

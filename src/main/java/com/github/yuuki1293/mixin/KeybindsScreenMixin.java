@@ -49,7 +49,7 @@ abstract public class KeybindsScreenMixin extends GameOptionsScreen {
         if (text.equals(ScreenTexts.DONE)) {
             return button -> {
                 pressAction.onPress(button);
-                IOLogic.saveKeymap(editPresetWidget.getSelected());
+                IOLogic.save(editPresetWidget.getSelected());
             };
         }
 
@@ -68,6 +68,6 @@ abstract public class KeybindsScreenMixin extends GameOptionsScreen {
     @Override
     public void close(){
         super.close();
-        IOLogic.saveKeymap(editPresetWidget.getSelected());
+        IOLogic.save(editPresetWidget.getSelected());
     }
 }

@@ -27,6 +27,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.github.yuuki1293.KeymapPresets.*;
+
 public class EditPresetWidget extends AbstractParentElement implements Drawable, Selectable {
     private final static MinecraftClient CLIENT = KeymapPresets.CLIENT;
     protected int x;
@@ -36,6 +38,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
     private final ArrayList<ButtonWidget> buttons = new ArrayList<>(0);
     private final ButtonWidget selectedButton;
     private final ButtonWidget addButton;
+    private final ButtonWidget deleteButton;
     private final ButtonWidget renameButton;
     private final TextFieldWidget renameField;
 
@@ -44,7 +47,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         this.y = y;
         this.width = width;
         this.height = height;
-        final var config = KeymapPresets.CONFIG.get();
+        final var config = CONFIG.get();
         this.selectedButton = new ButtonWidget(this.x, this.y, 150, 20,
             new LiteralText(config.selectedPreset), button -> showButtons());
         this.renameField = new RenameFieldWidget(CLIENT.textRenderer, this.x, this.y, 150, 20, new LiteralText(getSelected()));
@@ -64,9 +67,13 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         });
         this.addButton = new InFocusedButtonWidget(this.x + this.width / 2 + 5, this.y, 20, 20, new LiteralText("+"), button -> {
             final var name = IOLogic.genPrimaryName("New Preset");
-            IOLogic.saveKeymap(name);
+            IOLogic.save(name);
             selectedButton.setMessage(new LiteralText(name));
             renameButton.onPress();
+        });
+        this.deleteButton = new InFocusedButtonWidget(this.x + this.width / 2 + 27, this.y, 20, 20, new LiteralText("-"), button -> {
+            IOLogic.delete(getSelected());
+            selectedButton.setMessage(new LiteralText(CONFIG.get().selectedPreset));
         });
     }
 
@@ -82,6 +89,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         renameField.render(matrices, mouseX, mouseY, delta);
         addButton.active = !renameField.isActive();
         addButton.render(matrices, mouseX, mouseY, delta);
+        deleteButton.active = !renameField.isActive();
+        deleteButton.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
@@ -90,7 +99,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             selectedButton,
             renameField,
             renameButton,
-            addButton
+            addButton,
+            deleteButton
         };
         return Stream.concat(buttons.stream(),
                 Arrays.stream(children))
@@ -99,19 +109,19 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
 
     public void showButtons() {
         buttons.clear();
-        final var presets = IOLogic.getPresets();
+        final var presets = IOLogic.getNames();
         final int x = this.x;
         int y = this.y + 20;
         for (var preset : presets) {
             buttons.add(new ButtonWidget(x, y, 150, 20, new LiteralText(preset), button -> {
                 closeButtons();
-                IOLogic.loadKeymap(preset);
-                final var config = KeymapPresets.CONFIG.get();
+                IOLogic.load(preset);
+                final var config = CONFIG.get();
                 selectedButton.setMessage(new LiteralText(config.selectedPreset));
             }));
             y += 20;
         }
-        IOLogic.saveKeymap(getSelected());
+        IOLogic.save(getSelected());
     }
 
     public void closeButtons() {
@@ -146,7 +156,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         public RenameFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text text) {
             super(textRenderer, x, y, width, height, text);
             this.setChangedListener(newText -> {
-                if (IOLogic.movePresets(getSelected(), newText, true))
+                if (IOLogic.move(getSelected(), newText, true))
                     renameField.setRenderTextProvider(TEXT_PROVIDER_ERROR);
                 else
                     renameField.setRenderTextProvider(TEXT_PROVIDER_NORMAL);
@@ -167,7 +177,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
                     selectedButton.visible = true;
                     return true;
                 case GLFW.GLFW_KEY_ENTER:
-                    if (!IOLogic.movePresets(getSelected(), this.getText(), false))
+                    if (!IOLogic.move(getSelected(), this.getText(), false))
                         selectedButton.setMessage(new LiteralText(this.getText()));
                     this.setVisible(false);
                     selectedButton.visible = true;
@@ -185,7 +195,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
                 return ret;
 
             if (!this.isHovered()) {
-                if (!IOLogic.movePresets(getSelected(), this.getText(), false))
+                if (!IOLogic.move(getSelected(), this.getText(), false))
                     selectedButton.setMessage(new LiteralText(this.getText()));
                 this.setVisible(false);
                 selectedButton.visible = true;

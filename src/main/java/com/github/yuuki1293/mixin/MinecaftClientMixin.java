@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecaftClientMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void init(CallbackInfo ci) {
-        IOLogic.loadKeymap(KeymapPresets.CONFIG.get().selectedPreset);
+        IOLogic.load(KeymapPresets.CONFIG.get().selectedPreset);
     }
 }

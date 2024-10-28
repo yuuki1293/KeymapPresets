@@ -8,5 +8,7 @@
   "text.keymappresets.clear_failure": "プリセットの削除に失敗しました。GitHubリポジトリに問題を報告してください",
   "text.keymappresets.clear_success": "全てのプリセットを削除しました",
   "text.keymappresets.rename_failure": "プリセット %s は既に存在しています",
-  "text.keymappresets.rename_success": "%s を %s に変更しました"
+  "text.keymappresets.rename_success": "%s を %s に変更しました",
+  "text.keymappresets.delete_failure": "プリセット %s の削除に失敗しました。GitHubリポジトリに問題を報告してください",
+  "text.keymappresets.delete_success": "プリセット %s を削除しました"
 }

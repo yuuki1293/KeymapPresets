@@ -73,7 +73,7 @@ public class IOLogic {
         }
     }
 
-    public static String[] getName() {
+    public static String[] getNames() {
         File[] rawFiles = DIR_KEYMAPPRESETS.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
         if (rawFiles == null)
             return new String[0];
@@ -115,6 +115,20 @@ public class IOLogic {
             return true;
         } catch (Exception e) {
             LOGGER.error("Couldn't move preset file", e);
+            return true;
+        }
+    }
+
+    public static boolean delete(String presetName) {
+        final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
+
+        try {
+            FileUtils.delete(presetFile);
+            CONFIG.get().selectedPreset = Arrays.stream(getNames()).findFirst().orElse("");
+            CONFIG.save();
+            return false;
+        } catch (IOException e) {
+            LOGGER.error("Couldn't delete preset", e);
             return true;
         }
     }

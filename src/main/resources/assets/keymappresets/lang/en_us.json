@@ -8,5 +8,7 @@
   "text.keymappresets.clear_failure": "Failed to clear presets. Please report the issue to the GitHub repository.",
   "text.keymappresets.clear_success": "Presets cleared.",
   "text.keymappresets.rename_failure": "Preset %s already exists.",
-  "text.keymappresets.rename_success": "%s rename to %s !"
+  "text.keymappresets.rename_success": "%s rename to %s !",
+  "text.keymappresets.delete_failure": "Failed to delete Keymap %s. Please report the issue to the GitHub repository.",
+  "text.keymappresets.delete_success": "Preset %s deleted!"
 }
