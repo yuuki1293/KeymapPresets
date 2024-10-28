@@ -4,8 +4,10 @@ import com.github.yuuki1293.IOLogic;
 import com.github.yuuki1293.screen.EditPresetWidget;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.gui.screen.option.KeybindsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,17 +19,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeybindsScreen.class)
-public class KeybindsScreenMixin extends Screen {
+abstract public class KeybindsScreenMixin extends GameOptionsScreen {
     @Unique
     EditPresetWidget editPresetWidget;
 
-    protected KeybindsScreenMixin(Text title) {
-        super(title);
+    public KeybindsScreenMixin(Screen parent, GameOptions gameOptions, Text title) {
+        super(parent, gameOptions, title);
     }
 
     @Inject(method = "init", at = @At("HEAD"))
     private void init(CallbackInfo ci) {
-        editPresetWidget = this.addSelectableChild(new EditPresetWidget(this.width / 2 - 155, 20, 310, 20));
+        editPresetWidget = this.addSelectableChild(new EditPresetWidget(this.width / 2 - 155, 20, 310, 20, this));
     }
 
     @Inject(method = "render", at = @At("RETURN"))
@@ -52,6 +54,15 @@ public class KeybindsScreenMixin extends Screen {
         }
 
         return pressAction;
+    }
+
+    @Inject(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/option/GameOptionsScreen;keyPressed(III)Z"), cancellable = true)
+    private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        if(editPresetWidget.isEditing()) {
+            editPresetWidget.keyPressed(keyCode, scanCode, modifiers);
+            cir.setReturnValue(true);
+            cir.cancel();
+        }
     }
 
     @Override
