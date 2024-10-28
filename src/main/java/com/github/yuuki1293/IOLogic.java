@@ -17,7 +17,7 @@ import static com.github.yuuki1293.KeymapPresets.*;
 public class IOLogic {
     private static final File DIR_KEYMAPPRESETS = new File(CLIENT.runDirectory, MOD_ID);
 
-    public static boolean saveKeymap(String presetName) {
+    public static boolean save(String presetName) {
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try {
@@ -46,7 +46,7 @@ public class IOLogic {
         }
     }
 
-    public static boolean loadKeymap(String presetName) {
+    public static boolean load(String presetName) {
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
 
         try (BufferedReader br = new BufferedReader(new FileReader(presetFile))) {
@@ -73,7 +73,7 @@ public class IOLogic {
         }
     }
 
-    public static String[] getPresets() {
+    public static String[] getName() {
         File[] rawFiles = DIR_KEYMAPPRESETS.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
         if (rawFiles == null)
             return new String[0];
@@ -84,7 +84,7 @@ public class IOLogic {
             .toArray(String[]::new);
     }
 
-    public static boolean clearPresets() {
+    public static boolean clear() {
         try {
             FileUtils.cleanDirectory(DIR_KEYMAPPRESETS);
             CONFIG.get().selectedPreset = "";
@@ -96,7 +96,7 @@ public class IOLogic {
         }
     }
 
-    public static boolean movePresets(String presetName, String newName, boolean simulation) {
+    public static boolean move(String presetName, String newName, boolean simulation) {
         final File presetFile = new File(DIR_KEYMAPPRESETS, presetName + ".txt");
         final File newFile = new File(DIR_KEYMAPPRESETS, newName + ".txt");
 
