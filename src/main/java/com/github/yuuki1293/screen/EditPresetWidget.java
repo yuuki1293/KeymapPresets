@@ -115,13 +115,13 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         for (var preset : presets) {
             buttons.add(new ButtonWidget(x, y, 150, 20, new LiteralText(preset), button -> {
                 closeButtons();
+                IOLogic.save(getSelected());
                 IOLogic.load(preset);
                 final var config = CONFIG.get();
                 selectedButton.setMessage(new LiteralText(config.selectedPreset));
             }));
             y += 20;
         }
-        IOLogic.save(getSelected());
     }
 
     public void closeButtons() {
