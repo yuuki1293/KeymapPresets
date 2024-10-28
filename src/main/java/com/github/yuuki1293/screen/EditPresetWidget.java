@@ -49,6 +49,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         this.renameButton = new ButtonWidget(this.x + this.width / 2 + 5, this.y, 20, 20, new LiteralText("R"), button -> {
             selectedButton.visible = false;
             parent.focusOn(renameField);
+            this.focusOn(renameField);
             renameField.setVisible(true);
             renameField.setText(getSelected());
             renameField.setSelectionStart(0);

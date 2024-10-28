@@ -59,8 +59,8 @@ abstract public class KeybindsScreenMixin extends GameOptionsScreen {
     @Inject(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/option/GameOptionsScreen;keyPressed(III)Z"), cancellable = true)
     private void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if(editPresetWidget.isEditing()) {
-            editPresetWidget.keyPressed(keyCode, scanCode, modifiers);
-            cir.setReturnValue(true);
+            final var ret = editPresetWidget.keyPressed(keyCode, scanCode, modifiers);
+            cir.setReturnValue(ret);
             cir.cancel();
         }
     }
