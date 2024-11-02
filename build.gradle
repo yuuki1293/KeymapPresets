@@ -87,10 +87,6 @@ publishing {
 }
 
 var changelogMD = """## Feature
-- Add Preset Edit widget in Keybinds screen
-- Add rename command
-- Add delete command
-
 ## Fix
 
 **Full Changelog**: https://github.com/yuuki1293/KeymapPresets/compare/1.18.2-1.0.0...${project.version}
