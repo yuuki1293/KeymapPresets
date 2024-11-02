@@ -86,12 +86,6 @@ publishing {
     }
 }
 
-var changelogMD = """## Feature
-## Fix
-
-**Full Changelog**: https://github.com/yuuki1293/KeymapPresets/compare/1.18.2-1.0.0...${project.version}
-"""
-
 // build.gradle
 modrinth {
     var modrinthToken = System.getenv("MODRINTH_TOKEN")
@@ -110,7 +104,7 @@ modrinth {
     uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
     gameVersions = ["1.18.2"] // Must be an array, even with only one version
     loaders = ["fabric"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-    changelog = changelogMD
+    changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
     dependencies { // A special DSL for creating dependencies
         // scope.type
         // The scope can be `required`, `optional`, `incompatible`, or `embedded`
@@ -131,7 +125,7 @@ curseforge {
     project {
         id = '1124297'
         changelogType = 'markdown'
-        changelog = changelogMD
+        changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
         releaseType = 'release'
         addGameVersion '1.18.2'
         relations {
