@@ -1,0 +1,134 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    forge {
+        convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+        mixinConfig "keymappresets-common.mixins.json"
+        mixinConfig "keymappresets.mixins.json"
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+    // Remove the next line if you don't want to depend on the API
+    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+    }
+}
+
+// build.gradle
+modrinth {
+    var modrinthToken = System.getenv("MODRINTH_TOKEN")
+    if (modrinthToken == null) {
+        logger.log(LogLevel.WARN, "MODRINTH_TOKEN not found")
+        return
+    }
+
+    token = modrinthToken
+    // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
+    projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
+    versionNumber = project.version as String
+    versionName = "${archives_base_name}-${project.version}"
+    // You don't need to set this manually. Will fail if Modrinth has this version already
+    versionType = "release" // This is the default -- can also be `beta` or `alpha`
+    uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+    gameVersions = ["1.18.2"] // Must be an array, even with only one version
+    loaders = ["fabric"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+    changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+    dependencies { // A special DSL for creating dependencies
+        // scope.type
+        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+        // The type can either be `project` or `version`
+        required.project "cloth-config"
+    }
+}
+
+curseforge {
+    var curseApiKey = System.getenv("CURSEFORGE_API_KEY")
+    if (curseApiKey == null) {
+        logger.log(LogLevel.WARN, "CURSEFORGE_API_KEY not found")
+        return
+    }
+
+    apiKey = curseApiKey
+    project {
+        id = '1124297'
+        changelogType = 'markdown'
+        changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+        releaseType = 'release'
+        addGameVersion '1.18.2'
+        relations {
+            requiredDependency 'cloth-config'
+        }
+        mainArtifact(jar) {
+            displayName = "${archives_base_name}-${project.version}"
+        }
+    }
+}
