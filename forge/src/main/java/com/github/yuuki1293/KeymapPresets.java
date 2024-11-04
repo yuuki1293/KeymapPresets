@@ -31,7 +31,12 @@ public class KeymapPresets {
 
     public static ConfigHolder<KeymapPresetsConfig> CONFIG;
     public static KeymapPresetsMenuScreen screenPresetsMenu;
-    public static KeyBinding keyBindingMenu;
+    public static KeyBinding keyBindingMenu = new KeyBinding(
+        "key.keymappresets.open_menu", // The translation key of the keybinding's name
+        InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
+        GLFW.GLFW_KEY_LEFT_ALT, // The keycode of the key
+        "category.keymappresets.generic" // The translation key of the keybinding's category.
+    );
     public static boolean pressed = false;
     private static boolean wasPressed = false;
 
@@ -41,13 +46,6 @@ public class KeymapPresets {
         ClientRegistry.registerKeyBinding(keyBindingMenu);
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onInitializeClient);
-
-        keyBindingMenu = new KeyBinding(
-            "key.keymappresets.open_menu", // The translation key of the keybinding's name
-            InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-            GLFW.GLFW_KEY_LEFT_ALT, // The keycode of the key
-            "category.keymappresets.generic" // The translation key of the keybinding's category.
-        );
 
         AutoConfig.register(KeymapPresetsConfig.class, Toml4jConfigSerializer::new);
         CONFIG = AutoConfig.getConfigHolder(KeymapPresetsConfig.class);
