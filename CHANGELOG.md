@@ -1,3 +1,9 @@
+# 1.18.2-1.1.0
+
+## Feature
+
+- Support Forge
+
 # 1.18.2-1.0.0
 
 ## Feature
