@@ -11,7 +11,7 @@ authors = "yuuki1293"
 description = '''
 Create key mapping presets and recall them at any time.
 '''
-logoFile = "assets/keymappresets/icon.png"
+logoFile = "icon.png"
 
 [[dependencies.keymappresets]]
 modId = "forge"
