@@ -6,7 +6,7 @@ license = "MIT"
 [[mods]]
 modId = "keymappresets"
 version = "${version}"
-displayName = "KeymapPresets"
+displayName = "Keymap Presets"
 authors = "yuuki1293"
 description = '''
 Create key mapping presets and recall them at any time.
