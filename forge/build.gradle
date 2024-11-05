@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
@@ -84,52 +86,33 @@ publishing {
     }
 }
 
-// build.gradle
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
+    apiToken = System.getenv("CURSEFORGE_API_KEY") ?: "XXX"
+
+    def mainFile = upload(1124297, remapJar)
+    mainFile.releaseType = "release"
+    mainFile.changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+    mainFile.changelogType = "markdown"
+    mainFile.addRequirement("cloth-config", "architectury-api")
+    mainFile.addModLoader("forge")
+}
+
 modrinth {
-    var modrinthToken = System.getenv("MODRINTH_TOKEN")
-    if (modrinthToken == null) {
-        logger.log(LogLevel.WARN, "MODRINTH_TOKEN not found")
-        return
-    }
+    var modrinthToken = System.getenv("MODRINTH_TOKEN") ?: "XXX"
 
     token = modrinthToken
     // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
     projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
     versionNumber = project.version as String
-    versionName = "${archives_base_name}-${project.version}"
+    versionName = "${base.archivesName.get()}-${project.version}"
     // You don't need to set this manually. Will fail if Modrinth has this version already
     versionType = "release" // This is the default -- can also be `beta` or `alpha`
-    uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+    uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
     gameVersions = ["1.18.2"] // Must be an array, even with only one version
-    loaders = ["fabric"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+    loaders = ["forge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
     changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
-    dependencies { // A special DSL for creating dependencies
-        // scope.type
-        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
-        // The type can either be `project` or `version`
+    dependencies {
         required.project "cloth-config"
-    }
-}
-
-curseforge {
-    var curseApiKey = System.getenv("CURSEFORGE_API_KEY")
-    if (curseApiKey == null) {
-        logger.log(LogLevel.WARN, "CURSEFORGE_API_KEY not found")
-        return
-    }
-
-    apiKey = curseApiKey
-    project {
-        id = '1124297'
-        changelogType = 'markdown'
-        changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
-        releaseType = 'release'
-        addGameVersion '1.18.2'
-        relations {
-            requiredDependency 'cloth-config'
-        }
-        mainArtifact(jar) {
-            displayName = "${archives_base_name}-${project.version}"
-        }
+        required.project "architectury-api"
     }
 }

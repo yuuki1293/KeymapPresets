@@ -2,7 +2,7 @@ plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT" // Architectury
     id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false // Mapping
     id "com.modrinth.minotaur" version "2.+" // Modrinth Uploader
-    id "com.matthewprenger.cursegradle" version "1.4.0" // Forge Uploader
+    id 'net.darkhax.curseforgegradle' version '1.1.15' // Forge Uploader
 }
 
 architectury {
@@ -11,6 +11,8 @@ architectury {
 
 subprojects {
     apply plugin: "dev.architectury.loom"
+    apply plugin: "com.modrinth.minotaur"
+    apply plugin: "net.darkhax.curseforgegradle"
 
     loom {
         silentMojangMappingsLicense()
@@ -30,7 +32,7 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    version = rootProject.mod_version
+    version = "${rootProject.mod_version}-${project.name}"
     group = rootProject.maven_group
 
     base {
@@ -45,7 +47,7 @@ allprojects {
         // for more information about repositories.
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
         options.release = 17
     }
