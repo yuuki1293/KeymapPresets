@@ -68,7 +68,7 @@ allprojects {
         mainFile.changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
         mainFile.changelogType = "markdown"
         mainFile.displayName = "${rootProject.name} ${project.version}"
-        mainFile.addGameVersion("1.18.2")
+        mainFile.addGameVersion("1.18.2", "Client")
         mainFile.addJavaVersion("Java 17")
         mainFile.addRequirement("cloth-config", "architectury-api")
         mainFile.addModLoader(project.name)
