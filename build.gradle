@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT" // Architectury
     id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false // Mapping
@@ -32,11 +34,11 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    version = "${rootProject.mod_version}-${project.name}"
+    version = "${project.minecraft_version}-${rootProject.mod_version}-${project.name}"
     group = rootProject.maven_group
 
     base {
-        archivesName = "${project.minecraft_version}-${project.archives_base_name}"
+        archivesName = project.archives_base_name
     }
 
     repositories {
@@ -56,3 +58,39 @@ allprojects {
         withSourcesJar()
     }
 }
+
+[":forge", ":fabric"].each { proj -> project(proj) {
+    tasks.register('publishCurseForge', TaskPublishCurseForge) {
+        apiToken = System.getenv("CURSEFORGE_API_KEY") ?: "XXX"
+
+        def mainFile = upload(1124297, remapJar)
+        mainFile.releaseType = "release"
+        mainFile.changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+        mainFile.changelogType = "markdown"
+        mainFile.displayName = "${rootProject.name} ${project.version}"
+        mainFile.addGameVersion("1.18.2")
+        mainFile.addJavaVersion("Java 17")
+        mainFile.addRequirement("cloth-config", "architectury-api")
+        mainFile.addModLoader(project.name)
+    }
+
+    modrinth {
+        var modrinthToken = System.getenv("MODRINTH_TOKEN") ?: "XXX"
+
+        token = modrinthToken
+        // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
+        projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
+        versionNumber = project.version as String
+        versionName = "${rootProject.name} ${project.version}"
+        // You don't need to set this manually. Will fail if Modrinth has this version already
+        versionType = "release" // This is the default -- can also be `beta` or `alpha`
+        uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+        gameVersions = ["1.18.2"] // Must be an array, even with only one version
+        loaders = [project.name] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+        changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+        dependencies {
+            required.project "cloth-config"
+            required.project "architectury-api"
+        }
+    }
+}}
