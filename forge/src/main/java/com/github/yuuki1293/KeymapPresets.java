@@ -10,8 +10,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,15 +56,17 @@ public class KeymapPresets {
     }
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent event) {
-        if (keyBindingMenu.wasPressed()) { // initialize
-            CLIENT.mouse.unlockCursor();
-            pressed = true;
-        }
-        if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
-            CLIENT.mouse.lockCursor();
-        }
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase.equals(TickEvent.Phase.END)) {
+            if (keyBindingMenu.wasPressed()) { // initialize
+                CLIENT.mouse.unlockCursor();
+                pressed = true;
+            }
+            if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
+                CLIENT.mouse.lockCursor();
+            }
 
-        wasPressed = keyBindingMenu.isPressed();
+            wasPressed = keyBindingMenu.isPressed();
+        }
     }
 }
