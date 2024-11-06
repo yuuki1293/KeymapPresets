@@ -1,5 +1,9 @@
 package yuuki1293.keymappresets.common;
 
+import dev.architectury.event.events.client.ClientTickEvent;
+import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.MinecraftClient;
@@ -26,4 +30,27 @@ public class Common {
     );
     public static boolean pressed = false;
     public static boolean wasPressed = false;
+
+    static {
+        AutoConfig.register(KeymapPresetsConfig.class, Toml4jConfigSerializer::new);
+        CONFIG = AutoConfig.getConfigHolder(KeymapPresetsConfig.class);
+    }
+
+    public static void init() {
+        KeyMappingRegistry.register(keyBindingMenu);
+
+        ClientTickEvent.CLIENT_POST.register(client -> {
+            if (keyBindingMenu.wasPressed()) { // initialize
+                client.mouse.unlockCursor();
+                pressed = true;
+            }
+            if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
+                client.mouse.lockCursor();
+            }
+
+            wasPressed = keyBindingMenu.isPressed();
+        });
+
+        screenPresetsMenu = new KeymapPresetsMenuScreen();
+    }
 }
