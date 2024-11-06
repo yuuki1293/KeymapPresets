@@ -8,6 +8,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
@@ -92,9 +93,29 @@ public class IOLogic {
             return new String[0];
 
         return Arrays.stream(rawFiles)
-            .sorted(Comparator.comparingLong(File::lastModified))
+            .sorted(getComparator())
             .map(file -> FilenameUtils.removeExtension(file.getName()))
             .toArray(String[]::new);
+    }
+
+    private static Comparator<File> getComparator() {
+        var comp = switch (CONFIG.get().sortType) {
+            case MODIFIED -> Comparator.comparingLong(File::lastModified);
+            case CREATED -> Comparator.comparingLong((File file) -> {
+                try {
+                    return Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toMillis();
+                } catch (IOException e) {
+                    LOGGER.error("Couldn't read file attributes {}", file.getName(), e);
+                    return -1;
+                }
+            });
+            case NAME -> Comparator.comparing(File::getName);
+        };
+
+        return switch (CONFIG.get().sortOrder) {
+            case ASC -> comp;
+            case DESC -> comp.reversed();
+        };
     }
 
     public static boolean clear() {
