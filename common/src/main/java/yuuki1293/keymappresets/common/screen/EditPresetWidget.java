@@ -1,6 +1,6 @@
-package com.github.yuuki1293.screen;
+package yuuki1293.keymappresets.common.screen;
 
-import com.github.yuuki1293.IOLogic;
+import yuuki1293.keymappresets.common.IOLogic;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
@@ -25,8 +25,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.yuuki1293.Common.CLIENT;
-import static com.github.yuuki1293.Common.CONFIG;
+import static yuuki1293.keymappresets.common.Common.CLIENT;
+import static yuuki1293.keymappresets.common.Common.CONFIG;
 
 public class EditPresetWidget extends AbstractParentElement implements Drawable, Selectable {
     protected int x;

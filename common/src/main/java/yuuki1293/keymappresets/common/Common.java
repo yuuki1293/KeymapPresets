@@ -1,6 +1,6 @@
-package com.github.yuuki1293;
+package yuuki1293.keymappresets.common;
 
-import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
+import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;

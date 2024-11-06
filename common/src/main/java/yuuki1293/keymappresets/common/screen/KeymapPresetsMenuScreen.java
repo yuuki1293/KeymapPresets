@@ -1,13 +1,13 @@
-package com.github.yuuki1293.screen;
+package yuuki1293.keymappresets.common.screen;
 
-import com.github.yuuki1293.IOLogic;
+import yuuki1293.keymappresets.common.IOLogic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
-import static com.github.yuuki1293.Common.CLIENT;
+import static yuuki1293.keymappresets.common.Common.CLIENT;
 
 public class KeymapPresetsMenuScreen extends Screen {
     public boolean visible = false;

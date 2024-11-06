@@ -1,13 +1,13 @@
-package com.github.yuuki1293.mixin;
+package yuuki1293.keymappresets.common.mixin;
 
-import com.github.yuuki1293.Common;
+import yuuki1293.keymappresets.common.Common;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.github.yuuki1293.Common.CLIENT;
+import static yuuki1293.keymappresets.common.Common.CLIENT;
 
 @Mixin(Mouse.class)
 public class MouseMixin {

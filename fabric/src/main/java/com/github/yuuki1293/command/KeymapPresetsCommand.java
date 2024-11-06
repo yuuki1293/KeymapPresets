@@ -1,6 +1,6 @@
 package com.github.yuuki1293.command;
 
-import com.github.yuuki1293.IOLogic;
+import yuuki1293.keymappresets.common.IOLogic;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -11,8 +11,8 @@ import net.minecraft.text.*;
 
 import java.util.Arrays;
 
-import static com.github.yuuki1293.Common.COLOR_LINK;
-import static com.github.yuuki1293.Common.URL_ISSUE;
+import static yuuki1293.keymappresets.common.Common.COLOR_LINK;
+import static yuuki1293.keymappresets.common.Common.URL_ISSUE;
 
 public class KeymapPresetsCommand {
     public static final SuggestionProvider<FabricClientCommandSource> SUGGESTION_PROVIDER = (context, builder) -> CommandSource.suggestMatching(

@@ -1,4 +1,4 @@
-package com.github.yuuki1293;
+package yuuki1293.keymappresets.common;
 
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -12,10 +12,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.github.yuuki1293.Common.CLIENT;
-import static com.github.yuuki1293.Common.CONFIG;
-import static com.github.yuuki1293.Common.LOGGER;
-import static com.github.yuuki1293.Common.MOD_ID;
+import static yuuki1293.keymappresets.common.Common.CLIENT;
+import static yuuki1293.keymappresets.common.Common.CONFIG;
+import static yuuki1293.keymappresets.common.Common.LOGGER;
+import static yuuki1293.keymappresets.common.Common.MOD_ID;
 
 public class IOLogic {
     private static final File DIR_KEYMAPPRESETS = new File(CLIENT.runDirectory, MOD_ID);

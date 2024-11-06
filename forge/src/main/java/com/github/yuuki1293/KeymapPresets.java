@@ -1,7 +1,9 @@
 package com.github.yuuki1293;
 
 import com.github.yuuki1293.command.KeymapPresetsCommand;
-import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
+import yuuki1293.keymappresets.common.Common;
+import yuuki1293.keymappresets.common.KeymapPresetsConfig;
+import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 
@@ -14,9 +16,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import static com.github.yuuki1293.Common.MOD_ID;
-import static com.github.yuuki1293.Common.CONFIG;
-import static com.github.yuuki1293.Common.CLIENT;
+import static yuuki1293.keymappresets.common.Common.MOD_ID;
+import static yuuki1293.keymappresets.common.Common.CONFIG;
+import static yuuki1293.keymappresets.common.Common.CLIENT;
 
 @Mod(MOD_ID)
 public class KeymapPresets {

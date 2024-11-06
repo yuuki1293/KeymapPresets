@@ -1,6 +1,6 @@
 package com.github.yuuki1293.command;
 
-import com.github.yuuki1293.IOLogic;
+import yuuki1293.keymappresets.common.IOLogic;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 
-import static com.github.yuuki1293.Common.*;
+import static yuuki1293.keymappresets.common.Common.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class KeymapPresetsCommand {

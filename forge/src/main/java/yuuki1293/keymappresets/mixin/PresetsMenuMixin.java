@@ -1,16 +1,16 @@
-package com.github.yuuki1293.mixin;
+package yuuki1293.keymappresets.mixin;
 
-import com.github.yuuki1293.Common;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import yuuki1293.keymappresets.common.Common;
 
-import static com.github.yuuki1293.Common.CLIENT;
+import static yuuki1293.keymappresets.common.Common.CLIENT;
 
-@Mixin(InGameHud.class)
+@Mixin(ForgeIngameGui.class)
 public class PresetsMenuMixin {
     @Inject(at = @At("HEAD"), method = "render")
     private void onRender(MatrixStack matrices, float tickDelta, CallbackInfo info) {

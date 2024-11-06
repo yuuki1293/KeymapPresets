@@ -1,7 +1,8 @@
 package com.github.yuuki1293;
 
 import com.github.yuuki1293.command.KeymapPresetsCommand;
-import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
+import yuuki1293.keymappresets.common.KeymapPresetsConfig;
+import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -9,7 +10,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
-import static com.github.yuuki1293.Common.*;
+import static yuuki1293.keymappresets.common.Common.*;
 
 public class KeymapPresets implements ClientModInitializer {
     @Override

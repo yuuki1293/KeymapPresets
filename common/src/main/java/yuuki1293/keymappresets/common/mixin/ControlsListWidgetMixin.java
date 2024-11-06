@@ -1,4 +1,4 @@
-package com.github.yuuki1293.mixin;
+package yuuki1293.keymappresets.common.mixin;
 
 import net.minecraft.client.gui.screen.option.ControlsListWidget;
 import org.spongepowered.asm.mixin.Mixin;
