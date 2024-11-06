@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 
-import static com.github.yuuki1293.KeymapPresets.*;
+import static com.github.yuuki1293.Common.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class KeymapPresetsCommand {

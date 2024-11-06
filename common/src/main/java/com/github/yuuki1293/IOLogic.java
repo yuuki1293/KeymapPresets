@@ -12,7 +12,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.github.yuuki1293.KeymapPresets.*;
+import static com.github.yuuki1293.Common.CLIENT;
+import static com.github.yuuki1293.Common.CONFIG;
+import static com.github.yuuki1293.Common.LOGGER;
+import static com.github.yuuki1293.Common.MOD_ID;
 
 public class IOLogic {
     private static final File DIR_KEYMAPPRESETS = new File(CLIENT.runDirectory, MOD_ID);

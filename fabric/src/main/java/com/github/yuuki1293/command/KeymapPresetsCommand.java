@@ -11,7 +11,8 @@ import net.minecraft.text.*;
 
 import java.util.Arrays;
 
-import static com.github.yuuki1293.KeymapPresets.*;
+import static com.github.yuuki1293.Common.COLOR_LINK;
+import static com.github.yuuki1293.Common.URL_ISSUE;
 
 public class KeymapPresetsCommand {
     public static final SuggestionProvider<FabricClientCommandSource> SUGGESTION_PROVIDER = (context, builder) -> CommandSource.suggestMatching(

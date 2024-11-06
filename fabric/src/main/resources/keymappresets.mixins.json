@@ -3,10 +3,6 @@
   "package": "com.github.yuuki1293.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "ControlsListWidgetMixin",
-    "MinecaftClientMixin",
-    "KeybindsScreenMixin",
-    "MouseMixin",
     "PresetsMenuMixin"
   ],
   "injectors": {

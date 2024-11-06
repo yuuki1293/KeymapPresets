@@ -3,12 +3,8 @@ package com.github.yuuki1293;
 import com.github.yuuki1293.command.KeymapPresetsCommand;
 import com.github.yuuki1293.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -17,33 +13,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.lwjgl.glfw.GLFW;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-@Mod(KeymapPresets.MOD_ID)
+import static com.github.yuuki1293.Common.MOD_ID;
+import static com.github.yuuki1293.Common.CONFIG;
+import static com.github.yuuki1293.Common.CLIENT;
+
+@Mod(MOD_ID)
 public class KeymapPresets {
-    public static final String MOD_ID = "keymappresets";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final MinecraftClient CLIENT = MinecraftClient.getInstance();
-    public static final String URL_ISSUE = "https://github.com/yuuki1293/KeymapPresets/issues";
-    public static final int COLOR_LINK = 0x0000EE;
-
-    public static ConfigHolder<KeymapPresetsConfig> CONFIG;
-    public static KeymapPresetsMenuScreen screenPresetsMenu;
-    public static KeyBinding keyBindingMenu = new KeyBinding(
-        "key.keymappresets.open_menu", // The translation key of the keybinding's name
-        InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-        GLFW.GLFW_KEY_LEFT_ALT, // The keycode of the key
-        "category.keymappresets.generic" // The translation key of the keybinding's category.
-    );
-    public static boolean pressed = false;
-    private static boolean wasPressed = false;
-
     public KeymapPresets() {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(KeymapPresetsCommand.class);
-        ClientRegistry.registerKeyBinding(keyBindingMenu);
+        ClientRegistry.registerKeyBinding(Common.keyBindingMenu);
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onInitializeClient);
 
@@ -52,21 +32,21 @@ public class KeymapPresets {
     }
 
     public void onInitializeClient(final FMLClientSetupEvent event) {
-        screenPresetsMenu = new KeymapPresetsMenuScreen();
+        Common.screenPresetsMenu = new KeymapPresetsMenuScreen();
     }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase.equals(TickEvent.Phase.END)) {
-            if (keyBindingMenu.wasPressed()) { // initialize
+            if (Common.keyBindingMenu.wasPressed()) { // initialize
                 CLIENT.mouse.unlockCursor();
-                pressed = true;
+                Common.pressed = true;
             }
-            if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
+            if (Common.wasPressed && !Common.keyBindingMenu.isPressed()) { // finalize
                 CLIENT.mouse.lockCursor();
             }
 
-            wasPressed = keyBindingMenu.isPressed();
+            Common.wasPressed = Common.keyBindingMenu.isPressed();
         }
     }
 }

@@ -1,12 +1,13 @@
 package com.github.yuuki1293.screen;
 
 import com.github.yuuki1293.IOLogic;
-import com.github.yuuki1293.KeymapPresets;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+
+import static com.github.yuuki1293.Common.CLIENT;
 
 public class KeymapPresetsMenuScreen extends Screen {
     public boolean visible = false;
@@ -32,7 +33,7 @@ public class KeymapPresetsMenuScreen extends Screen {
             final var presetName = presets[i];
 
             this.addDrawableChild(new ButtonWidget(x - 25, y - 10, 50, 20, new LiteralText(presetName), button -> {
-                final var player = KeymapPresets.CLIENT.player;
+                final var player = CLIENT.player;
                 if (player == null) {
                     this.close();
                     return;
