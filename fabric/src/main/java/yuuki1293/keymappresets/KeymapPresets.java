@@ -1,6 +1,6 @@
-package com.github.yuuki1293;
+package yuuki1293.keymappresets;
 
-import com.github.yuuki1293.command.KeymapPresetsCommand;
+import yuuki1293.keymappresets.command.KeymapPresetsCommand;
 import yuuki1293.keymappresets.common.KeymapPresetsConfig;
 import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.AutoConfig;

@@ -1,4 +1,4 @@
-package com.github.yuuki1293.command;
+package yuuki1293.keymappresets.command;
 
 import yuuki1293.keymappresets.common.IOLogic;
 import com.mojang.brigadier.arguments.StringArgumentType;
