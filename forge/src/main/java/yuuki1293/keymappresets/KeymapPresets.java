@@ -1,7 +1,9 @@
 package yuuki1293.keymappresets;
 
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import yuuki1293.keymappresets.command.KeymapPresetsCommand;
+import org.jetbrains.annotations.NotNull;
 import yuuki1293.keymappresets.common.Common;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -9,6 +11,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import yuuki1293.keymappresets.common.command.CommonCommand;
 
 import static yuuki1293.keymappresets.common.Common.MOD_ID;
 
@@ -16,7 +19,6 @@ import static yuuki1293.keymappresets.common.Common.MOD_ID;
 public class KeymapPresets {
     public KeymapPresets() {
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(KeymapPresetsCommand.class);
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onInitializeClient);
     }
@@ -24,5 +26,10 @@ public class KeymapPresets {
     @SubscribeEvent
     public void onInitializeClient(final FMLClientSetupEvent event) {
         Common.init();
+    }
+
+    @SubscribeEvent
+    public static void onCommandRegistration(final @NotNull RegisterClientCommandsEvent event) {
+        CommonCommand.register(event.getDispatcher(), ServerCommandSource.class);
     }
 }
