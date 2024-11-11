@@ -1,6 +1,6 @@
 # Latest
 ## Feature
-- Add Sort Option
+- Add sort config (command and widget)
 
 ## Fix
 - Forge command not working
