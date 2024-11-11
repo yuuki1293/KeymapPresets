@@ -77,21 +77,21 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             IOLogic.delete(getSelected());
             selectedButton.setMessage(new LiteralText(CONFIG.get().selectedPreset));
         });
-        this.sortTypeButton = new InFocusedButtonWidget(this.x + this.width / 2 + 71, this.y, 60, 20, new LiteralText(CONFIG.get().sortType.toString()), button -> {
+        this.sortTypeButton = new InFocusedButtonWidget(this.x + this.width / 2 + 71, this.y, 60, 20, new LiteralText(CONFIG.get().sortType.getString()), button -> {
             var sortType = CONFIG.get().sortType;
             SortType next = EnumUtil.next(sortType);
             CONFIG.get().sortType = next;
             CONFIG.save();
-            button.setMessage(new LiteralText(next.toString()));
+            button.setMessage(new LiteralText(next.getString()));
             if (!buttons.isEmpty())
                 showButtons();
         });
-        this.sortOrderButton = new InFocusedButtonWidget(this.x + this.width / 2 + 133, this.y, 20, 20, new LiteralText(CONFIG.get().sortOrder.toString()), button -> {
+        this.sortOrderButton = new InFocusedButtonWidget(this.x + this.width / 2 + 133, this.y, 20, 20, new LiteralText(CONFIG.get().sortOrder.getString()), button -> {
             var sortOrder = CONFIG.get().sortOrder;
             SortOrder next = EnumUtil.next(sortOrder);
             CONFIG.get().sortOrder = next;
             CONFIG.save();
-            button.setMessage(new LiteralText(next.toString()));
+            button.setMessage(new LiteralText(next.getString()));
             if (!buttons.isEmpty())
                 showButtons();
         });

@@ -5,8 +5,7 @@ public enum SortType {
     CREATED,
     NAME;
 
-    @Override
-    public String toString() {
-        return super.toString().toLowerCase();
+    public String getString() {
+        return this.toString().toLowerCase();
     }
 }

@@ -4,8 +4,7 @@ public enum SortOrder {
     ASC,
     DESC;
 
-    @Override
-    public String toString() {
+    public String getString() {
         return switch (this) {
             case ASC -> "⬆";
             case DESC -> "⬇";
