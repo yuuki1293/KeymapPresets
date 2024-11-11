@@ -83,13 +83,17 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             CONFIG.get().sortType = next;
             CONFIG.save();
             button.setMessage(new LiteralText(next.toString()));
+            if (!buttons.isEmpty())
+                showButtons();
         });
-        this.sortOrderButton = new InFocusedButtonWidget(this.x + this.width / 2 + 131, this.y, 20, 20, new LiteralText(CONFIG.get().sortOrder.toString()), button -> {
+        this.sortOrderButton = new InFocusedButtonWidget(this.x + this.width / 2 + 133, this.y, 20, 20, new LiteralText(CONFIG.get().sortOrder.toString()), button -> {
             var sortOrder = CONFIG.get().sortOrder;
             SortOrder next = EnumUtil.next(sortOrder);
             CONFIG.get().sortOrder = next;
             CONFIG.save();
             button.setMessage(new LiteralText(next.toString()));
+            if (!buttons.isEmpty())
+                showButtons();
         });
     }
 
