@@ -6,40 +6,40 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.network.MessageType;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import yuuki1293.keymappresets.common.IOLogic;
+import yuuki1293.keymappresets.common.SortOrder;
+import yuuki1293.keymappresets.common.SortType;
 
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 import static yuuki1293.keymappresets.common.Common.*;
 import static yuuki1293.keymappresets.common.Common.CLIENT;
 
 @SuppressWarnings("unchecked")
 public class CommonCommand {
-    private static <T extends CommandSource> SuggestionProvider<T> getSuggestionProvider(Class<T> clazz) {
-        return (context, builder) -> {
-            try {
-                return (CompletableFuture<Suggestions>) clazz.getMethod("suggestMatching", Stream.class, SuggestionsBuilder.class).invoke(
-                    null,
-                    Arrays.stream(IOLogic.getNames()).map(CommonCommand::fixBadString),
-                    builder
-                );
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+    private static <T extends CommandSource> SuggestionProvider<T> getPresetSuggestionProvider(Class<T> clazz) {
+        return (context, builder) -> CommandSource.suggestMatching(
+            Arrays.stream(IOLogic.getNames()).map(CommonCommand::fixBadString),
+            builder
+        );
+    }
+
+    private static <T extends CommandSource, E extends Enum<E>> SuggestionProvider<T> getEnumSuggestionProvider(Class<T> clazz, Class<E> enumClass) {
+        return ((context, builder) -> CommandSource.suggestMatching(
+            Arrays.stream(enumClass.getEnumConstants()).map(Object::toString),
+            builder
+        ));
     }
 
     public static <T extends CommandSource> void register(CommandDispatcher<T> dispatcher, Class<T> clazz) {
-        final SuggestionProvider<T> suggestionProvider = getSuggestionProvider(clazz);
+        final SuggestionProvider<T> presetSuggestionProvider = getPresetSuggestionProvider(clazz);
+        final SuggestionProvider<T> sortTypeSuggestionProvider = getEnumSuggestionProvider(clazz, SortType.class);
+        final SuggestionProvider<T> sortOrderSuggestionProvider = getEnumSuggestionProvider(clazz, SortOrder.class);
 
         dispatcher.register(
             LiteralArgumentBuilder.<T>literal("keymap")
@@ -48,12 +48,12 @@ public class CommonCommand {
 
                 .then(LiteralArgumentBuilder.<T>literal("save")
                     .then(RequiredArgumentBuilder.<T, String>argument("name", StringArgumentType.string())
-                        .suggests(suggestionProvider)
+                        .suggests(presetSuggestionProvider)
                         .executes(CommonCommand::commandSave)))
 
                 .then(LiteralArgumentBuilder.<T>literal("load")
                     .then(RequiredArgumentBuilder.<T, String>argument("name", StringArgumentType.string())
-                        .suggests(suggestionProvider)
+                        .suggests(presetSuggestionProvider)
                         .executes(CommonCommand::commandLoad)))
 
                 .then(LiteralArgumentBuilder.<T>literal("list")
@@ -64,14 +64,21 @@ public class CommonCommand {
 
                 .then(LiteralArgumentBuilder.<T>literal("rename")
                     .then(RequiredArgumentBuilder.<T, String>argument("old", StringArgumentType.string())
-                        .suggests(suggestionProvider)
+                        .suggests(presetSuggestionProvider)
                         .then(RequiredArgumentBuilder.<T, String>argument("new", StringArgumentType.string())
                             .executes(CommonCommand::commandRename))))
 
                 .then(LiteralArgumentBuilder.<T>literal("delete")
                     .then(RequiredArgumentBuilder.<T, String>argument("name", StringArgumentType.string())
-                        .suggests(suggestionProvider)
+                        .suggests(presetSuggestionProvider)
                         .executes(CommonCommand::commandDelete)))
+
+                .then(LiteralArgumentBuilder.<T>literal("sort")
+                    .then(RequiredArgumentBuilder.<T, String>argument("type", StringArgumentType.string())
+                        .suggests(sortTypeSuggestionProvider)
+                        .then(RequiredArgumentBuilder.<T, String>argument("order", StringArgumentType.string())
+                            .suggests(sortOrderSuggestionProvider)
+                            .executes(CommonCommand::commandSort))))
         );
     }
 
@@ -134,6 +141,20 @@ public class CommonCommand {
             sendFeedback(linkText(URL_ISSUE));
         } else {
             sendFeedback(new TranslatableText("text.keymappresets.delete_success"));
+        }
+        return 1;
+    }
+
+    public static int commandSort(CommandContext<?> context) {
+        try {
+            final SortType sortType = Enum.valueOf(SortType.class, StringArgumentType.getString(context, "type"));
+            final SortOrder sortOrder = Enum.valueOf(SortOrder.class, StringArgumentType.getString(context, "order"));
+            CONFIG.get().sortType = sortType;
+            CONFIG.get().sortOrder = sortOrder;
+            CONFIG.save();
+            sendFeedback(new TranslatableText("text.keymappresets.sort_success"));
+        } catch (IllegalArgumentException e) {
+            sendError(new TranslatableText("text.keymappresets.sort_failure"));
         }
         return 1;
     }
