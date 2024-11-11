@@ -100,8 +100,8 @@ public class IOLogic {
 
     private static Comparator<File> getComparator() {
         var comp = switch (CONFIG.get().sortType) {
-            case MODIFIED -> Comparator.comparingLong(File::lastModified);
-            case CREATED -> Comparator.comparingLong((File file) -> {
+            case modified -> Comparator.comparingLong(File::lastModified);
+            case created -> Comparator.comparingLong((File file) -> {
                 try {
                     return Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toMillis();
                 } catch (IOException e) {
@@ -109,12 +109,12 @@ public class IOLogic {
                     return -1;
                 }
             });
-            case NAME -> Comparator.comparing(File::getName);
+            case name -> Comparator.comparing(File::getName);
         };
 
         return switch (CONFIG.get().sortOrder) {
-            case ASC -> comp;
-            case DESC -> comp.reversed();
+            case asc -> comp;
+            case desc -> comp.reversed();
         };
     }
 

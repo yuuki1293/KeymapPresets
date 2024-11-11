@@ -77,12 +77,12 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             IOLogic.delete(getSelected());
             selectedButton.setMessage(new LiteralText(CONFIG.get().selectedPreset));
         });
-        this.sortTypeButton = new InFocusedButtonWidget(this.x + this.width / 2 + 71, this.y, 60, 20, new LiteralText(CONFIG.get().sortType.getString()), button -> {
+        this.sortTypeButton = new InFocusedButtonWidget(this.x + this.width / 2 + 71, this.y, 60, 20, new LiteralText(CONFIG.get().sortType.toString()), button -> {
             var sortType = CONFIG.get().sortType;
             SortType next = EnumUtil.next(sortType);
             CONFIG.get().sortType = next;
             CONFIG.save();
-            button.setMessage(new LiteralText(next.getString()));
+            button.setMessage(new LiteralText(next.toString()));
             if (!buttons.isEmpty())
                 showButtons();
         });

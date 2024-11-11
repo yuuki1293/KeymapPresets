@@ -9,6 +9,6 @@ import static yuuki1293.keymappresets.common.Common.MOD_ID;
 public class KeymapPresetsConfig implements ConfigData {
     public String selectedPreset = "";
 
-    public SortType sortType = SortType.CREATED;
-    public SortOrder sortOrder = SortOrder.ASC;
+    public SortType sortType = SortType.created;
+    public SortOrder sortOrder = SortOrder.asc;
 }
