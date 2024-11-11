@@ -103,7 +103,7 @@ public class IOLogic {
             case modified -> Comparator.comparingLong(File::lastModified);
             case created -> Comparator.comparingLong((File file) -> {
                 try {
-                    return Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toMillis();
+                    return -Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toMillis();
                 } catch (IOException e) {
                     LOGGER.error("Couldn't read file attributes {}", file.getName(), e);
                     return -1;
