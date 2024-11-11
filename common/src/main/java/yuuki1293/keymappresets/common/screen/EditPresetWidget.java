@@ -1,5 +1,6 @@
 package yuuki1293.keymappresets.common.screen;
 
+import yuuki1293.keymappresets.common.EnumUtil;
 import yuuki1293.keymappresets.common.IOLogic;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.AbstractParentElement;
@@ -17,6 +18,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
+import yuuki1293.keymappresets.common.SortOrder;
+import yuuki1293.keymappresets.common.SortType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +41,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
     private final ButtonWidget addButton;
     private final ButtonWidget deleteButton;
     private final ButtonWidget renameButton;
+    private final ButtonWidget sortTypeButton;
+    private final ButtonWidget sortOrderButton;
     private final TextFieldWidget renameField;
 
     public EditPresetWidget(int x, int y, int width, int height, Screen parent) {
@@ -72,6 +77,20 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             IOLogic.delete(getSelected());
             selectedButton.setMessage(new LiteralText(CONFIG.get().selectedPreset));
         });
+        this.sortTypeButton = new InFocusedButtonWidget(this.x + this.width / 2 + 71, this.y, 60, 20, new LiteralText(CONFIG.get().sortType.toString()), button -> {
+            var sortType = CONFIG.get().sortType;
+            SortType next = EnumUtil.next(sortType);
+            CONFIG.get().sortType = next;
+            CONFIG.save();
+            button.setMessage(new LiteralText(next.toString()));
+        });
+        this.sortOrderButton = new InFocusedButtonWidget(this.x + this.width / 2 + 131, this.y, 20, 20, new LiteralText(CONFIG.get().sortOrder.toString()), button -> {
+            var sortOrder = CONFIG.get().sortOrder;
+            SortOrder next = EnumUtil.next(sortOrder);
+            CONFIG.get().sortOrder = next;
+            CONFIG.save();
+            button.setMessage(new LiteralText(next.toString()));
+        });
     }
 
     @Override
@@ -88,6 +107,8 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
         addButton.render(matrices, mouseX, mouseY, delta);
         deleteButton.active = !renameField.isActive();
         deleteButton.render(matrices, mouseX, mouseY, delta);
+        sortTypeButton.render(matrices, mouseX, mouseY, delta);
+        sortOrderButton.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
@@ -97,7 +118,9 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             renameField,
             renameButton,
             addButton,
-            deleteButton
+            deleteButton,
+            sortTypeButton,
+            sortOrderButton
         };
         return Stream.concat(buttons.stream(),
                 Arrays.stream(children))
