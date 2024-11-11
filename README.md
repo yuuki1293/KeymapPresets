@@ -12,12 +12,13 @@ Keymap Presets is a client-side mod useful for environments that require frequen
 
 ### Commands
 
-- Save preset. "/keymap save &lt;name&gt;"
-- Load preset. "/keymap load &lt;name&gt;"
-- Delete preset. "/keymap delete &lt;name&gt;"
+- Save preset. "/keymap save <name>"
+- Load preset. "/keymap load <name>"
+- Delete preset. "/keymap delete <name>"
 - Clear all presets. "/keymap clear"
-- Rename preset. "/keymap rename &lt;name&gt;"
+- Rename preset. "/keymap rename <name>"
 - Show all presets. "/keymap list"
+- Set sort config. "/keymap sort <type> <order>"
 
 ## F&Q
 
