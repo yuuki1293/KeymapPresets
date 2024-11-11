@@ -1,6 +1,5 @@
 package yuuki1293.keymappresets;
 
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,6 @@ public class KeymapPresets {
 
     @SubscribeEvent
     public static void onCommandRegistration(final @NotNull RegisterClientCommandsEvent event) {
-        CommonCommand.register(event.getDispatcher(), ServerCommandSource.class);
+        CommonCommand.register(event.getDispatcher());
     }
 }

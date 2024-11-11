@@ -20,26 +20,21 @@ import java.util.Arrays;
 import static yuuki1293.keymappresets.common.Common.*;
 import static yuuki1293.keymappresets.common.Common.CLIENT;
 
-@SuppressWarnings("unchecked")
 public class CommonCommand {
-    private static <T extends CommandSource> SuggestionProvider<T> getPresetSuggestionProvider(Class<T> clazz) {
-        return (context, builder) -> CommandSource.suggestMatching(
-            Arrays.stream(IOLogic.getNames()).map(CommonCommand::fixBadString),
-            builder
-        );
-    }
-
-    private static <T extends CommandSource, E extends Enum<E>> SuggestionProvider<T> getEnumSuggestionProvider(Class<T> clazz, Class<E> enumClass) {
+    private static <T extends CommandSource, E extends Enum<E>> SuggestionProvider<T> getEnumSuggestionProvider(Class<E> enumClass) {
         return ((context, builder) -> CommandSource.suggestMatching(
             Arrays.stream(enumClass.getEnumConstants()).map(Object::toString),
             builder
         ));
     }
 
-    public static <T extends CommandSource> void register(CommandDispatcher<T> dispatcher, Class<T> clazz) {
-        final SuggestionProvider<T> presetSuggestionProvider = getPresetSuggestionProvider(clazz);
-        final SuggestionProvider<T> sortTypeSuggestionProvider = getEnumSuggestionProvider(clazz, SortType.class);
-        final SuggestionProvider<T> sortOrderSuggestionProvider = getEnumSuggestionProvider(clazz, SortOrder.class);
+    public static <T extends CommandSource> void register(CommandDispatcher<T> dispatcher) {
+        final SuggestionProvider<T> presetSuggestionProvider = (context, builder) -> CommandSource.suggestMatching(
+            Arrays.stream(IOLogic.getNames()).map(CommonCommand::fixBadString),
+            builder
+        );
+        final SuggestionProvider<T> sortTypeSuggestionProvider = getEnumSuggestionProvider(SortType.class);
+        final SuggestionProvider<T> sortOrderSuggestionProvider = getEnumSuggestionProvider(SortOrder.class);
 
         dispatcher.register(
             LiteralArgumentBuilder.<T>literal("keymap")
