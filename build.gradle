@@ -2,7 +2,7 @@ import org.jetbrains.changelog.Changelog
 
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT" // Architectury
-    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false // Mapping
+    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false // Mapping
     id "com.modrinth.minotaur" version "2.+" // Modrinth Uploader
     id 'com.matthewprenger.cursegradle' version '1.4.0' // Forge Uploader
     id 'org.jetbrains.changelog' version '2.2.1'
