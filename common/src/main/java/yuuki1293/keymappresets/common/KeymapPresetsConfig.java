@@ -11,4 +11,8 @@ public class KeymapPresetsConfig implements ConfigData {
 
     public SortType sortType = SortType.created;
     public SortOrder sortOrder = SortOrder.asc;
+
+    public int maxButtonWidth = 150;
+    public int minButtonWidth = 50;
+    public int shortcutTextColor = 0x80FFFFFF;
 }
