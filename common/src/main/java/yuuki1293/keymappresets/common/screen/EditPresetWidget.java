@@ -62,21 +62,17 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             renameField.setText(getSelected());
             renameField.setSelectionStart(0);
             renameField.setTextFieldFocused(true);
-        }, (button, matrices, mouseX, mouseY) -> {
-            if (button.active) {
-                parent.renderOrderedTooltip(matrices, List.of(OrderedText.styledForwardsVisitedString("Rename", Style.EMPTY)), mouseX, mouseY);
-            }
-        });
+        }, getSupplier(parent, "Rename"));
         this.addButton = new InFocusedButtonWidget(this.x + this.width / 2 + 5, this.y, 20, 20, new LiteralText("+"), button -> {
             final var name = IOLogic.genPrimaryName("New Preset");
             IOLogic.save(name);
             selectedButton.setMessage(new LiteralText(name));
             renameButton.onPress();
-        });
+        }, getSupplier(parent, "Add"));
         this.deleteButton = new InFocusedButtonWidget(this.x + this.width / 2 + 27, this.y, 20, 20, new LiteralText("-"), button -> {
             IOLogic.delete(getSelected());
             selectedButton.setMessage(new LiteralText(CONFIG.get().selectedPreset));
-        });
+        }, getSupplier(parent, "Delete"));
         this.sortTypeButton = new InFocusedButtonWidget(this.x + this.width / 2 + 71, this.y, 60, 20, new LiteralText(CONFIG.get().sortType.toString()), button -> {
             var sortType = CONFIG.get().sortType;
             SortType next = EnumUtil.next(sortType);
@@ -85,7 +81,7 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             button.setMessage(new LiteralText(next.toString()));
             if (!buttons.isEmpty())
                 showButtons();
-        });
+        }, getSupplier(parent, "Sort Type"));
         this.sortOrderButton = new InFocusedButtonWidget(this.x + this.width / 2 + 133, this.y, 20, 20, new LiteralText(CONFIG.get().sortOrder.getString()), button -> {
             var sortOrder = CONFIG.get().sortOrder;
             SortOrder next = EnumUtil.next(sortOrder);
@@ -95,6 +91,14 @@ public class EditPresetWidget extends AbstractParentElement implements Drawable,
             if (!buttons.isEmpty())
                 showButtons();
         });
+    }
+
+    private ButtonWidget.TooltipSupplier getSupplier(Screen parent, String text){
+        return (button, matrices, mouseX, mouseY) -> {
+            if (button.active) {
+                parent.renderOrderedTooltip(matrices, List.of(OrderedText.styledForwardsVisitedString(text, Style.EMPTY)), mouseX, mouseY);
+            }
+        };
     }
 
     @Override
