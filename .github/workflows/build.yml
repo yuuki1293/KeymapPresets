@@ -46,18 +46,34 @@ jobs:
           arguments: curseforge
         continue-on-error: true
 
-      - name: Publish to Modrinth
+      - name: Publish to Modrinth (Fabric)
         uses: gradle/gradle-build-action@v2
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         with:
-          arguments: modrinth
+          arguments: fabric:modrinth
         continue-on-error: true
 
-      - name: Publish to GitHub Release
+      - name: Publish to Modrinth (Forge)
+        uses: gradle/gradle-build-action@v2
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        with:
+          arguments: forge:modrinth
+        continue-on-error: true
+
+      - name: Publish to GitHub Release (Fabric)
         uses: gradle/gradle-build-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          arguments: githubRelease
+          arguments: fabric:githubRelease
+        continue-on-error: true
+
+      - name: Publish to GitHub Release (Forge)
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          arguments: fabric:githubRelease
         continue-on-error: true

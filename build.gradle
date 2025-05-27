@@ -5,6 +5,7 @@ plugins {
     id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false // Mapping
     id "com.modrinth.minotaur" version "2.+" // Modrinth Uploader
     id 'com.matthewprenger.cursegradle' version '1.4.0' // Forge Uploader
+    id 'com.github.breadmoirai.github-release' version '2.4.1'
     id 'org.jetbrains.changelog' version '2.2.1'
 }
 
@@ -73,44 +74,76 @@ String parserChangelog() {
     return parsedChangelog
 }
 
-[":forge", ":fabric"].each { proj -> project(proj) {
-    curseforge {
-        apiKey = System.getenv('CURSEFORGE_TOKEN') ?: ''
-        // noinspection GroovyAssignabilityCheck
-        project {
-            id = '1124297'
-            addGameVersion 'Java 17'
-            addGameVersion project.name.capitalize()
-            addGameVersion '1.18.2'
-            releaseType = 'release'
-            changelog = parserChangelog()
-            changelogType = 'markdown'
-            mainArtifact remapJar, {
-                displayName = "${rootProject.name} ${project.version}"
-                relations {
-                    requiredDependency 'cloth-config'
-                    requiredDependency 'architectury-api'
+[":forge", ":fabric"].each { proj ->
+    project(proj) {
+        curseforge {
+            apiKey = System.getenv('CURSEFORGE_TOKEN') ?: ''
+            // noinspection GroovyAssignabilityCheck
+            project {
+                id = '1124297'
+                addGameVersion 'Java 17'
+                addGameVersion project.name.capitalize()
+                addGameVersion '1.18.2'
+                releaseType = 'release'
+                changelog = parserChangelog()
+                changelogType = 'markdown'
+                mainArtifact remapJar, {
+                    displayName = "${rootProject.name} ${project.version}"
+                    relations {
+                        requiredDependency 'cloth-config'
+                        requiredDependency 'architectury-api'
+                    }
                 }
             }
         }
-    }
 
 
-    modrinth {
-        token = System.getenv("MODRINTH_TOKEN") ?: ""
-        // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
-        projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
-        versionNumber = project.version as String
-        versionName = "${rootProject.name} ${project.version}"
-        // You don't need to set this manually. Will fail if Modrinth has this version already
-        versionType = "release" // This is the default -- can also be `beta` or `alpha`
-        uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-        gameVersions = ["1.18.2"] // Must be an array, even with only one version
-        loaders = [project.name] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-        changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
-        dependencies {
-            required.project "cloth-config"
-            required.project "architectury-api"
+        modrinth {
+            token = System.getenv("MODRINTH_TOKEN") ?: ""
+            // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
+            projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
+            versionNumber = project.version as String
+            versionName = "${rootProject.name} ${project.version}"
+            // You don't need to set this manually. Will fail if Modrinth has this version already
+            versionType = "release" // This is the default -- can also be `beta` or `alpha`
+            uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+            gameVersions = ["1.18.2"] // Must be an array, even with only one version
+            loaders = [project.name]
+            // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+            changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+            dependencies {
+                required.project "cloth-config"
+                required.project "architectury-api"
+            }
         }
     }
-}}
+}
+
+githubRelease {
+    token System.getenv('GITHUB_TOKEN') ?: '' // This is your personal access token with Repo permissions
+    // You get this from your user settings > developer settings > Personal Access Tokens
+    owner 'yuuki1293'
+    // default is the last part of your group. Eg group: 'com.github.breadmoirai" => owner: "breadmoirai"
+    repo 'KeymapPresets' // by default this is set to your project name
+    tagName "v${project.minecraft_version}-${rootProject.mod_version}"
+    // by default this is set to "v${project.version}"
+    targetCommitish '1.18.2' // by default this is set to "main"
+    releaseName "${rootProject.name} ${project.minecraft_version}-${rootProject.mod_version}"
+    // Release title, by default this is the same as the tagName
+    generateReleaseNotes false
+    // Generate release notes automatically, if true and body is present, body will be prepended, if name is not given, one will be generated by the tag
+    body parserChangelog() // by default this is empty
+    draft true // by default this is true
+    prerelease false // by default this is false
+    releaseAssets files(project(":fabric").tasks.named("remapJar").get(),
+            project(":forge").tasks.named("remapJar").get(),
+            project(":fabric").tasks.named("remapSourcesJar").get(),
+            project(":forge").tasks.named("remapSourcesJar").get())
+    // this points to which files you want to upload as assets with your release, by default this is empty
+    allowUploadToExisting.set false
+    // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
+    overwrite false // by default false; if set to true, will delete an existing release with the same tag and name
+    dryRun false // by default false; you can use this to see what actions would be taken without making a release
+    apiEndpoint 'https://api.github.com' // should only change for github enterprise users
+    client // This is the okhttp client used for http requests
+}
