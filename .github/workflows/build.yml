@@ -62,7 +62,7 @@ jobs:
           arguments: forge:modrinth
         continue-on-error: true
 
-      - name: Publish to GitHub Release (Fabric)
+      - name: Publish to GitHub Release
         uses: gradle/gradle-build-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
