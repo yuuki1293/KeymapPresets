@@ -2,6 +2,7 @@
 ## [1.2.1]
 ### Added
 - Fast preset swapping [#1](https://github.com/yuuki1293/KeymapPresets/issues/1)
+- Added some configurations.
 
 ## [1.2.0]
 ### Added
