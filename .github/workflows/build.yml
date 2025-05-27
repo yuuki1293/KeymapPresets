@@ -67,13 +67,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          arguments: fabric:githubRelease
+          arguments: githubRelease
         continue-on-error: true
 
-      - name: Publish to GitHub Release (Forge)
-        uses: gradle/gradle-build-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          arguments: fabric:githubRelease
-        continue-on-error: true
