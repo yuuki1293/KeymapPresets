@@ -1,4 +1,8 @@
 # 1.18.2 Changelog
+## [1.2.1]
+### Added
+- Fast preset swapping [#1](https://github.com/yuuki1293/KeymapPresets/issues/1)
+
 ## [1.2.0]
 ### Added
 - Add sort config (command and widget)
