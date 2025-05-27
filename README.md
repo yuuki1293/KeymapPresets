@@ -9,7 +9,7 @@ Keymap Presets is a client-side mod useful for environments that require frequen
 - Press ALT+\<N> key for quick select. ex) ALT+1 loads the ‘default’ preset.
   ![](https://github.com/user-attachments/assets/080bd2de-1fa7-4ab4-b6b9-699eb04d344f)
 - Add widget for editing presets on the key binds screen.
-  ![](https://github.com/user-attachments/assets/403b75c3-c933-40da-acc0-37efc3b7ce0d)
+  ![](https://github.com/user-attachments/assets/50ad5bd0-9e74-4763-abd1-9e29733af5ab)
 
 ### Commands
 
