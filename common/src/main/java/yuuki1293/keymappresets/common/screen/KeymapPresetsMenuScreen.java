@@ -1,5 +1,6 @@
 package yuuki1293.keymappresets.common.screen;
 
+import net.minecraft.client.gui.DrawableHelper;
 import yuuki1293.keymappresets.common.IOLogic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -30,7 +31,9 @@ public class KeymapPresetsMenuScreen extends Screen {
         for (int i = 0; i < len; i++) {
             final int x = x0 + (int) (Math.cos(2 * Math.PI / (double) len * (double) i - Math.PI / 2.0) * radius);
             final int y = y0 + (int) (Math.sin(2 * Math.PI / (double) len * (double) i - Math.PI / 2.0) * radius);
-            final var presetName = presets[i];
+            var presetName = presets[i];
+            var keyText = CLIENT.options.hotbarKeys[i].getBoundKeyLocalizedText();
+            int width = CLIENT.textRenderer.getWidth(presetName);
 
             this.addDrawableChild(new ButtonWidget(x - 25, y - 10, 50, 20, new LiteralText(presetName), button -> {
                 final var player = CLIENT.player;
@@ -43,7 +46,13 @@ public class KeymapPresetsMenuScreen extends Screen {
                     player.sendMessage(new TranslatableText("text.keymappresets.load_failure", presetName), true);
                 else
                     player.sendMessage(new TranslatableText("text.keymappresets.load_success", presetName), true);
-            }));
+            }) {
+                @Override
+                public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                    super.renderButton(matrices, mouseX, mouseY, delta);
+                    drawCenteredText(matrices, CLIENT.textRenderer, keyText, x + width / 2, y + height + 2, 0x80ffffff);
+                }
+            });
         }
     }
 
@@ -62,10 +71,10 @@ public class KeymapPresetsMenuScreen extends Screen {
             client.mouse.lockCursor();
     }
 
-    public boolean closeWith(int ordinal){
+    public boolean closeWith(int ordinal) {
         var presets = IOLogic.getNames();
 
-        if(ordinal < 0 || ordinal >= presets.length) {
+        if (ordinal < 0 || ordinal >= presets.length) {
             close();
             return true;
         } else {
@@ -73,7 +82,7 @@ public class KeymapPresetsMenuScreen extends Screen {
         }
     }
 
-    public boolean closeWith(String presetName){
+    public boolean closeWith(String presetName) {
         this.close();
         return IOLogic.load(presetName);
     }
