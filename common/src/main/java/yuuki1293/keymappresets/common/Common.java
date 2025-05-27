@@ -3,6 +3,7 @@ package yuuki1293.keymappresets.common;
 import dev.architectury.event.events.client.ClientTickEvent;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import net.minecraft.text.TranslatableText;
 import yuuki1293.keymappresets.common.register.KeyBindings;
 import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -51,9 +52,14 @@ public class Common {
         wasPressed = keyBindingMenu.isPressed();
 
         if (screenPresetsMenu.visible) {
-            for (int i = 0; i < client.options.hotbarKeys.length; i++) {
-                if(client.options.hotbarKeys[i].isPressed()){
-                    screenPresetsMenu.closeWith(i);
+            for (int i = 0; i < Math.min(client.options.hotbarKeys.length, IOLogic.getNames().length); i++) {
+                if (client.options.hotbarKeys[i].isPressed()) {
+                    if (client.player == null) break;
+
+                    if (screenPresetsMenu.closeWith(i)) {
+                        client.player.sendMessage(new TranslatableText("text.keymappresets.load_failure", IOLogic.getName(i)), true);
+                    } else
+                        client.player.sendMessage(new TranslatableText("text.keymappresets.load_success", IOLogic.getName(i)), true);
                 }
             }
         }

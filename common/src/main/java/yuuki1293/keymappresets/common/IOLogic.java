@@ -87,6 +87,13 @@ public class IOLogic {
         }
     }
 
+    public static String getName(int i) {
+        var names = getNames();
+        if (i < 0 || i >= names.length)
+            return "";
+        return names[i];
+    }
+
     public static String[] getNames() {
         File[] rawFiles = DIR_KEYMAPPRESETS.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
         if (rawFiles == null)

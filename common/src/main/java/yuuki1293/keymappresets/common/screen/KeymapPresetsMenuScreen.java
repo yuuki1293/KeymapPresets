@@ -43,7 +43,6 @@ public class KeymapPresetsMenuScreen extends Screen {
                     player.sendMessage(new TranslatableText("text.keymappresets.load_failure", presetName), true);
                 else
                     player.sendMessage(new TranslatableText("text.keymappresets.load_success", presetName), true);
-                this.close();
             }));
         }
     }
