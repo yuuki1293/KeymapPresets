@@ -39,7 +39,7 @@ public class KeymapPresetsMenuScreen extends Screen {
                     return;
                 }
 
-                if (IOLogic.load(presetName))
+                if (closeWith(presetName))
                     player.sendMessage(new TranslatableText("text.keymappresets.load_failure", presetName), true);
                 else
                     player.sendMessage(new TranslatableText("text.keymappresets.load_success", presetName), true);
@@ -57,8 +57,25 @@ public class KeymapPresetsMenuScreen extends Screen {
 
     @Override
     public void close() {
+        super.close();
         visible = false;
         if (client != null)
             client.mouse.lockCursor();
+    }
+
+    public boolean closeWith(int ordinal){
+        var presets = IOLogic.getNames();
+
+        if(ordinal < 0 || ordinal >= presets.length) {
+            close();
+            return true;
+        } else {
+            return closeWith(presets[ordinal]);
+        }
+    }
+
+    public boolean closeWith(String presetName){
+        this.close();
+        return IOLogic.load(presetName);
     }
 }

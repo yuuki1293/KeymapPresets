@@ -1,17 +1,16 @@
 package yuuki1293.keymappresets.common;
 
 import dev.architectury.event.events.client.ClientTickEvent;
-import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import yuuki1293.keymappresets.common.register.KeyBindings;
 import yuuki1293.keymappresets.common.screen.KeymapPresetsMenuScreen;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static yuuki1293.keymappresets.common.register.KeyBindings.keyBindingMenu;
 
 public class Common {
     public static final String MOD_ID = "keymappresets";
@@ -22,12 +21,7 @@ public class Common {
 
     public static ConfigHolder<KeymapPresetsConfig> CONFIG;
     public static KeymapPresetsMenuScreen screenPresetsMenu;
-    public static KeyBinding keyBindingMenu = new KeyBinding(
-        "key.keymappresets.open_menu", // The translation key of the keybinding's name
-        InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-        GLFW.GLFW_KEY_LEFT_ALT, // The keycode of the key
-        "category.keymappresets.generic" // The translation key of the keybinding's category.
-    );
+
     public static boolean pressed = false;
     public static boolean wasPressed = false;
 
@@ -37,20 +31,31 @@ public class Common {
     }
 
     public static void init() {
-        KeyMappingRegistry.register(keyBindingMenu);
+        KeyBindings.register();
 
-        ClientTickEvent.CLIENT_POST.register(client -> {
-            if (keyBindingMenu.wasPressed()) { // initialize
-                client.mouse.unlockCursor();
-                pressed = true;
-            }
-            if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
-                client.mouse.lockCursor();
-            }
-
-            wasPressed = keyBindingMenu.isPressed();
-        });
+        ClientTickEvent.CLIENT_POST.register(Common::keyBindingMenuEvent);
 
         screenPresetsMenu = new KeymapPresetsMenuScreen();
+    }
+
+    private static void keyBindingMenuEvent(MinecraftClient client) {
+        if (keyBindingMenu.wasPressed()) { // initialize
+            client.mouse.unlockCursor();
+            pressed = true;
+        }
+
+        if (wasPressed && !keyBindingMenu.isPressed()) { // finalize
+            client.mouse.lockCursor();
+        }
+
+        wasPressed = keyBindingMenu.isPressed();
+
+        if (screenPresetsMenu.visible) {
+            for (int i = 0; i < client.options.hotbarKeys.length; i++) {
+                if(client.options.hotbarKeys[i].isPressed()){
+                    screenPresetsMenu.closeWith(i);
+                }
+            }
+        }
     }
 }

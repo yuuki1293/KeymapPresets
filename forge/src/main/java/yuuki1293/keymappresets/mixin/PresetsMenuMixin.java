@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yuuki1293.keymappresets.common.Common;
+import yuuki1293.keymappresets.common.register.KeyBindings;
 
 import static yuuki1293.keymappresets.common.Common.CLIENT;
 
@@ -27,7 +28,7 @@ public class PresetsMenuMixin {
             screen.visible = true;
         }
 
-        if (Common.keyBindingMenu.isPressed())
+        if (KeyBindings.keyBindingMenu.isPressed())
             screen.render(matrices, mouseX, mouseY, tickDelta);
         else
             screen.visible = false;
