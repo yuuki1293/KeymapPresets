@@ -82,7 +82,6 @@ String parserChangelog() {
             addGameVersion 'Java 17'
             addGameVersion project.name.capitalize()
             addGameVersion '1.18.2'
-            addGameVersion 'Client'
             releaseType = 'release'
             changelog = parserChangelog()
             changelogType = 'markdown'
