@@ -110,7 +110,7 @@ String parserChangelog() {
             gameVersions = ["1.18.2"] // Must be an array, even with only one version
             loaders = [project.name]
             // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-            changelog = "https://github.com/yuuki1293/KeymapPresets/blob/master/CHANGELOG.md"
+            changelog = parserChangelog()
             dependencies {
                 required.project "cloth-config"
                 required.project "architectury-api"
