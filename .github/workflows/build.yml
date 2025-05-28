@@ -69,4 +69,3 @@ jobs:
         with:
           arguments: githubRelease
         continue-on-error: true
-

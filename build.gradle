@@ -74,50 +74,47 @@ String parserChangelog() {
     return parsedChangelog
 }
 
-[":forge", ":fabric"].each { proj ->
-    project(proj) {
-        curseforge {
-            apiKey = System.getenv('CURSEFORGE_TOKEN') ?: ''
-            // noinspection GroovyAssignabilityCheck
-            project {
-                id = '1124297'
-                addGameVersion 'Java 17'
-                addGameVersion project.name.capitalize()
-                addGameVersion '1.18.2'
-                releaseType = 'release'
-                changelog = parserChangelog()
-                changelogType = 'markdown'
-                mainArtifact remapJar, {
-                    displayName = "${rootProject.name} ${project.version}"
-                    relations {
-                        requiredDependency 'cloth-config'
-                        requiredDependency 'architectury-api'
-                    }
+[":forge", ":fabric"].each { proj -> project(proj) {
+    curseforge {
+        apiKey = System.getenv('CURSEFORGE_TOKEN') ?: ''
+        // noinspection GroovyAssignabilityCheck
+        project {
+            id = '1124297'
+            addGameVersion 'Java 17'
+            addGameVersion project.name.capitalize()
+            addGameVersion '1.18.2'
+            releaseType = 'release'
+            changelog = parserChangelog()
+            changelogType = 'markdown'
+            mainArtifact remapJar, {
+                displayName = "${rootProject.name} ${project.version}"
+                relations {
+                    requiredDependency 'cloth-config'
+                    requiredDependency 'architectury-api'
                 }
             }
         }
+    }
 
 
-        modrinth {
-            token = System.getenv("MODRINTH_TOKEN") ?: ""
-            // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
-            projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
-            versionNumber = project.version as String
-            versionName = "${rootProject.name} ${project.version}"
-            // You don't need to set this manually. Will fail if Modrinth has this version already
-            versionType = "release" // This is the default -- can also be `beta` or `alpha`
-            uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-            gameVersions = ["1.18.2"] // Must be an array, even with only one version
-            loaders = [project.name]
-            // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-            changelog = parserChangelog()
-            dependencies {
-                required.project "cloth-config"
-                required.project "architectury-api"
-            }
+    modrinth {
+        token = System.getenv("MODRINTH_TOKEN") ?: ""
+        // Remember to have the MODRINTH_TOKEN environment variable set or else this will fail - just make sure it stays private!
+        projectId = "8qR2oUZT" // This can be the project ID or the slug. Either will work!
+        versionNumber = project.version as String
+        versionName = "${rootProject.name} ${project.version}"
+        // You don't need to set this manually. Will fail if Modrinth has this version already
+        versionType = "release" // This is the default -- can also be `beta` or `alpha`
+        uploadFile = remapJar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+        gameVersions = ["1.18.2"] // Must be an array, even with only one version
+        loaders = [project.name] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+        changelog = parserChangelog()
+        dependencies {
+            required.project "cloth-config"
+            required.project "architectury-api"
         }
     }
-}
+}}
 
 githubRelease {
     token System.getenv('GITHUB_TOKEN') ?: '' // This is your personal access token with Repo permissions
