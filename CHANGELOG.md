@@ -1,5 +1,5 @@
 # 1.18.2 Changelog
-## [1.2.1]
+## [1.2.1] - 2025-05-27
 ### Added
 - Fast preset swapping [#1](https://github.com/yuuki1293/KeymapPresets/issues/1)
 - Added some configurations.
